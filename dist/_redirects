@@ -1,0 +1,12 @@
+# Gabriel AI Portal - API routing
+/api/containers/* https://gabriel-core.peoplemerit.workers.dev/:splat 200
+/api/users/* https://gabriel-users.peoplemerit.workers.dev/:splat 200
+/api/courses/* https://gabriel-courses.peoplemerit.workers.dev/:splat 200
+/api/career/* https://gabriel-career.peoplemerit.workers.dev/:splat 200
+
+# Admin dashboard
+/admin /admin/dashboard/index.html 200
+/dashboard /admin/dashboard/index.html 200
+
+# Default fallback
+/* /index.html 200

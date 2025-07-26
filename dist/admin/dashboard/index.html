@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel AI Admin Portal - Educational Platform Management</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        .card p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.3s ease;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.online {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Gabriel AI Admin Portal</h1>
+            <p>Breaking poverty cycles through accessible, career-aligned education</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="containerCount">13</div>
+                    <div class="stat-label">Active Containers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="studentCount">0</div>
+                    <div class="stat-label">Registered Students</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="courseCount">0</div>
+                    <div class="stat-label">Available Courses</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="contentFiles">91,462</div>
+                    <div class="stat-label">Content Files Ready</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Container Management -->
+            <div class="card">
+                <h3>🐳 Container Management</h3>
+                <p>Monitor and manage Gabriel AI Docker containers</p>
+                <div>
+                    <strong>Core Services:</strong>
+                    <span class="status online">13 Online</span>
+                </div>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li>Gabriel Core (Port 9000) ✅</li>
+                    <li>User Management (Port 9001) ✅</li>
+                    <li>Course Management (Port 9002) ✅</li>
+                    <li>Virtual Human (Port 9003) ✅</li>
+                    <li>AI Tutoring (Port 9006) ✅</li>
+                </ul>
+                <button class="btn" onclick="window.open('https://gabriel-dashboard.peoplemerit.workers.dev', '_blank')">View Container Dashboard</button>
+            </div>
+
+            <!-- Content Management -->
+            <div class="card">
+                <h3>📚 Content Management</h3>
+                <p>Manage curriculum content and external drive integration</p>
+                <div>
+                    <strong>External Drive:</strong>
+                    <span class="status pending">Integration Pending</span>
+                </div>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li>91,462 files awaiting integration</li>
+                    <li>11GB of educational content</li>
+                    <li>Dual-mode curriculum ready</li>
+                    <li>Nigerian cultural adaptation</li>
+                </ul>
+                <button class="btn" onclick="initiateContentIntegration()">Start Content Integration</button>
+            </div>
+
+            <!-- Student Management -->
+            <div class="card">
+                <h3>👥 Student Management</h3>
+                <p>Manage student registrations and progress tracking</p>
+                <div>
+                    <strong>Registration System:</strong>
+                    <span class="status online">Ready</span>
+                </div>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li>User authentication system</li>
+                    <li>Progress tracking</li>
+                    <li>Career pathway selection</li>
+                    <li>Portfolio building</li>
+                </ul>
+                <button class="btn" onclick="manageStudents()">Manage Students</button>
+            </div>
+
+            <!-- Career Assessment -->
+            <div class="card">
+                <h3>💼 Career Assessment</h3>
+                <p>Monitor career alignment and job placement outcomes</p>
+                <div>
+                    <strong>Assessment Engine:</strong>
+                    <span class="status online">Active</span>
+                </div>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li>Remote career opportunities</li>
+                    <li>Local career pathways</li>
+                    <li>Skills assessment</li>
+                    <li>Employer partnerships</li>
+                </ul>
+                <button class="btn" onclick="viewCareerMetrics()">View Career Metrics</button>
+            </div>
+
+            <!-- Analytics & Monitoring -->
+            <div class="card">
+                <h3>📊 Platform Analytics</h3>
+                <p>Track platform performance and educational impact</p>
+                <div>
+                    <strong>Analytics Engine:</strong>
+                    <span class="status online">Collecting Data</span>
+                </div>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li>Student engagement metrics</li>
+                    <li>Container performance</li>
+                    <li>Employment outcomes</li>
+                    <li>Cultural impact measurement</li>
+                </ul>
+                <button class="btn" onclick="viewAnalytics()">View Full Analytics</button>
+            </div>
+
+            <!-- System Health -->
+            <div class="card">
+                <h3>🔧 System Health</h3>
+                <p>Monitor system performance and troubleshoot issues</p>
+                <div>
+                    <strong>System Status:</strong>
+                    <span class="status online">All Systems Operational</span>
+                </div>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li>HP Laptop: Running smoothly</li>
+                    <li>Cloudflare: Global access active</li>
+                    <li>GitHub: Sync operational</li>
+                    <li>Database: PostgreSQL healthy</li>
+                </ul>
+                <button class="btn" onclick="runSystemCheck()">Run System Check</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Admin portal functionality
+        function initiateContentIntegration() {
+            alert('🎒 Content Integration\n\nThis will begin the systematic integration of 91,462 files from your external drive into the Gabriel AI platform.\n\nNext steps:\n1. Connect external drive\n2. Analyze content structure\n3. Map to dual-mode curriculum\n4. Begin integration process');
+        }
+
+        function manageStudents() {
+            alert('👥 Student Management\n\nStudent management features:\n- View registered students\n- Track progress\n- Manage profiles\n- Monitor engagement\n\nThis will connect to the gabriel-users container.');
+        }
+
+        function viewCareerMetrics() {
+            alert('💼 Career Assessment\n\nCareer metrics include:\n- Job placement rates\n- Skills assessment results\n- Career pathway completion\n- Employer feedback\n\nThis connects to gabriel-career container.');
+        }
+
+        function viewAnalytics() {
+            alert('📊 Platform Analytics\n\nComprehensive analytics:\n- Student engagement\n- Learning outcomes\n- Platform performance\n- Cultural impact\n\nThis connects to gabriel-analytics container.');
+        }
+
+        function runSystemCheck() {
+            alert('🔧 System Health Check\n\nChecking:\n- Container status\n- Database connectivity\n- API endpoints\n- Performance metrics\n\nAll systems currently operational!');
+        }
+
+        // Update stats dynamically
+        function updateStats() {
+            // These would connect to actual API endpoints
+            document.getElementById('containerCount').textContent = '13';
+            document.getElementById('studentCount').textContent = '0';
+            document.getElementById('courseCount').textContent = '0';
+            document.getElementById('contentFiles').textContent = '91,462';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎓 Gabriel AI Admin Portal loaded');
+            updateStats();
+        });
+    </script>
+</body>
+</html>

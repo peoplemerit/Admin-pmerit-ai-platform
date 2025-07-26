@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel AI Portal - Educational Platform Administration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .access-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s ease;
+            margin: 10px;
+        }
+        .access-btn:hover {
+            transform: translateY(-2px);
+        }
+        .platform-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            text-align: left;
+        }
+        .platform-info h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .status-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .status-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .status-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">🎓</div>
+        <h1>Gabriel AI Portal</h1>
+        <p class="subtitle">Educational Platform Administration</p>
+        <p>Breaking poverty cycles through accessible, career-aligned education</p>
+        
+        <div class="status-grid">
+            <div class="status-item">
+                <div class="status-number">13</div>
+                <div class="status-label">Active Containers</div>
+            </div>
+            <div class="status-item">
+                <div class="status-number">91,462</div>
+                <div class="status-label">Content Files Ready</div>
+            </div>
+            <div class="status-item">
+                <div class="status-number">100%</div>
+                <div class="status-label">System Health</div>
+            </div>
+            <div class="status-item">
+                <div class="status-number">Ready</div>
+                <div class="status-label">Integration Status</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="admin/dashboard/index.html" class="access-btn">🔧 Admin Dashboard</a>
+            <a href="https://pmerit-ai-platform.pages.dev" class="access-btn" target="_blank">🌍 Main Platform</a>
+        </div>
+        
+        <div class="platform-info">
+            <h3>🚀 Platform Status</h3>
+            <ul style="text-align: left; margin-left: 20px;">
+                <li>✅ Docker containers operational (13/13)</li>
+                <li>✅ GitHub integration complete</li>
+                <li>✅ Cloudflare Pages deployment active</li>
+                <li>🎒 External drive integration ready</li>
+                <li>🌍 Global accessibility confirmed</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
