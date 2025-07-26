@@ -1,18 +1,46 @@
-# Dependencies
+# Gabriel AI Platform - Git Ignore
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.production
+*.env
+
+# Docker
+docker-compose.override.yml
+.docker/
+
+# Node modules
 node_modules/
 npm-debug.log*
 
-# Build outputs
-.env.local
-.env.production
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
-# IDE files
-.vscode/
-.idea/
+# Cloudflare
+.wrangler/
+wrangler.toml.backup
 
 # Logs
+logs/
 *.log
+
+# Container data
+data/
+backups/
+
+# Temporary files
+tmp/
+temp/
