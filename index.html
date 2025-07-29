@@ -3,664 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pmerit AI Educational Platform - Admin Portal</title>
+    <title>Pmerit AI Educational Platform - Tier 1 Admin Portal</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
+            min-height: 100vh; color: #333;
         }
-
         .container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 100%;
-            max-width: 1200px;
-            margin: 20px;
-            transition: all 0.3s ease;
+            overflow: hidden; width: 100%; max-width: 1400px;
+            margin: 20px auto; transition: all 0.3s ease;
         }
-
         .header {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
+            color: white; padding: 30px; text-align: center;
         }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-
-        .content {
-            padding: 40px;
-        }
-
-        .login-section {
-            display: block;
-        }
-
-        .dashboard-section {
-            display: none;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-
+        .logo { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; opacity: 0.9; font-weight: 300; }
+        .content { padding: 40px; }
+        .login-section { display: block; }
+        .dashboard-section { display: none; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
         .form-group input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: #fafbfc;
+            width: 100%; padding: 15px; border: 2px solid #e1e5e9;
+            border-radius: 10px; font-size: 16px; background: #fafbfc;
         }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #4facfe;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
-        }
-
         .btn {
-            width: 100%;
-            padding: 15px;
+            width: 100%; padding: 15px;
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: white; border: none; border-radius: 10px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
         }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert-info {
-            background: #cce7ff;
-            color: #004085;
-            border: 1px solid #b8daff;
-        }
-
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e1e5e9;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .tier-badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .tier-1 {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .tier-2 {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #4facfe;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: #666;
-            font-weight: 500;
-        }
-
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .action-btn {
-            padding: 20px;
-            background: white;
-            border: 2px solid #e1e5e9;
-            border-radius: 15px;
-            text-align: center;
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            display: block;
-            cursor: pointer;
-        }
-
-        .action-btn:hover {
-            border-color: #4facfe;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.15);
-            text-decoration: none;
-            color: #333;
-        }
-
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        .status-online {
-            background: #28a745;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #4facfe;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .demo-info {
-            margin-top: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
-            border-radius: 10px;
-            border-left: 4px solid #4facfe;
-        }
-
-        .integration-status {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .integration-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .integration-card .status {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .integration-card .label {
-            font-weight: 600;
-            color: #666;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-            }
-            
-            .content {
-                padding: 20px;
-            }
-            
-            .dashboard-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-        }
+        .alert { padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .alert-info { background: #cce7ff; color: #004085; }
+        .alert-error { background: #f8d7da; color: #721c24; display: none; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="logo">🎓 Pmerit AI</div>
-            <div class="subtitle">Educational Platform Administration Portal</div>
+            <div class="subtitle">Tier 1 - Super Admin Portal</div>
         </div>
-
         <div class="content">
-            <!-- Login Section -->
             <div class="login-section" id="loginSection">
-                <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Admin Portal Access</h2>
-                
+                <h2 style="text-align: center; margin-bottom: 30px;">Tier 1 Admin Portal Access</h2>
                 <div class="alert alert-info">
-                    <span class="status-indicator status-online"></span>
-                    <strong>Live Demo Portal:</strong> Ready for system integration and stakeholder review
+                    <strong>🔐 Tier 1 Access:</strong> Employee management and system administration
                 </div>
-                
-                <div class="alert alert-error" id="errorAlert" style="display: none;"></div>
-                
+                <div class="alert alert-error" id="errorAlert"></div>
                 <form id="loginForm">
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required placeholder="admin@pmerit.com" value="admin@pmerit.com">
+                        <label>Email Address</label>
+                        <input type="email" id="email" value="admin@pmerit.com" required>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required placeholder="Enter your password" value="admin123">
+                        <label>Password</label>
+                        <input type="password" id="password" value="SuperAdmin123!" required>
                     </div>
-                    
-                    <button type="submit" class="btn" id="loginBtn">
-                        Access Portal
-                    </button>
+                    <button type="submit" class="btn">Access Tier 1 Portal</button>
                 </form>
-
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p>Authenticating...</p>
-                </div>
-
-                <div class="demo-info">
-                    <h4 style="margin-bottom: 15px; color: #4facfe;">🔐 Demo Authentication System:</h4>
-                    <p><strong>Super Admin:</strong> admin@pmerit.com / admin123</p>
-                    <p><strong>Regular Admin:</strong> demo@pmerit.com / demo123</p>
-                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
-                        <em>Live demonstration portal ready for backend API integration and stakeholder presentations.</em>
-                    </p>
-                </div>
             </div>
-
-            <!-- Dashboard Section -->
             <div class="dashboard-section" id="dashboardSection">
-                <div class="dashboard-header">
-                    <div class="user-info">
-                        <div class="user-avatar" id="userAvatar">A</div>
-                        <div>
-                            <h3 id="userName">Admin User</h3>
-                            <div class="tier-badge tier-1" id="tierBadge">Tier 1 - Super Admin</div>
-                        </div>
-                    </div>
-                    <button class="logout-btn" onclick="logout()">Logout</button>
-                </div>
-
-                <div class="alert alert-success">
-                    <span class="status-indicator status-online"></span>
-                    Authentication system operational and ready for production integration
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">100%</div>
-                        <div class="stat-label">Portal Uptime</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">Live</div>
-                        <div class="stat-label">Global Access</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">Ready</div>
-                        <div class="stat-label">Integration Status</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">Secure</div>
-                        <div class="stat-label">Authentication</div>
-                    </div>
-                </div>
-
-                <h3 style="margin-bottom: 20px; color: #333;">Platform Integration Status</h3>
-                <div class="integration-status">
-                    <div class="integration-card">
-                        <div class="status">✅</div>
-                        <div class="label">Web Portal</div>
-                    </div>
-                    <div class="integration-card">
-                        <div class="status">✅</div>
-                        <div class="label">Cloudflare CDN</div>
-                    </div>
-                    <div class="integration-card">
-                        <div class="status">✅</div>
-                        <div class="label">GitHub Deploy</div>
-                    </div>
-                    <div class="integration-card">
-                        <div class="status">🔧</div>
-                        <div class="label">Backend API</div>
-                    </div>
-                </div>
-
-                <h3 style="margin: 30px 0 20px 0; color: #333;">Platform Management</h3>
-                <div class="actions-grid">
-                    <a href="https://pmerit-ai-platform-portal.pages.dev" class="action-btn" target="_blank">
-                        🏛️ Admin Portal
-                    </a>
-                    <a href="https://pmerit-ai-platform.pages.dev" class="action-btn" target="_blank">
-                        🚀 Main Platform
-                    </a>
-                    <a href="https://dash.cloudflare.com" class="action-btn" target="_blank">
-                        ☁️ Cloudflare Dashboard
-                    </a>
-                    <a href="https://github.com/peoplemerit/pmerit-ai-platform-portal" class="action-btn" target="_blank">
-                        📂 GitHub Repository
-                    </a>
-                    <div class="action-btn" onclick="testIntegration()">
-                        🔧 Test Integration
-                    </div>
-                    <div class="action-btn" onclick="viewSystemInfo()">
-                        📊 System Information
-                    </div>
-                </div>
+                <h2>🎉 Welcome to Tier 1 Portal!</h2>
+                <p>Employee management system will be fully implemented soon.</p>
+                <button onclick="logout()" class="btn" style="width: auto; margin-top: 20px;">Logout</button>
             </div>
         </div>
     </div>
-
     <script>
-        // Demo authentication data - no API calls needed
-        const DEMO_USERS = {
-            'admin@pmerit.com': {
-                id: 1,
-                email: 'admin@pmerit.com',
-                username: 'super_admin',
-                password: 'admin123',
-                tier_level: 1,
-                admin_privileges: {
-                    user_management: true,
-                    system_settings: true,
-                    tier2_access: true,
-                    devbot_access: true,
-                    docker_access: true,
-                    audit_logs: true
-                }
-            },
-            'demo@pmerit.com': {
-                id: 2,
-                email: 'demo@pmerit.com',
-                username: 'demo_admin',
-                password: 'demo123',
-                tier_level: 2,
-                admin_privileges: {
-                    course_management: true,
-                    student_management: true,
-                    analytics_access: true,
-                    content_management: true
-                }
-            }
-        };
-
-        // DOM elements
-        const loginSection = document.getElementById('loginSection');
-        const dashboardSection = document.getElementById('dashboardSection');
-        const loginForm = document.getElementById('loginForm');
-        const errorAlert = document.getElementById('errorAlert');
-        const loading = document.getElementById('loading');
-
-        // Check if user is already logged in on page load
-        window.addEventListener('load', () => {
-            const userInfo = localStorage.getItem('demo_user_info');
-            if (userInfo) {
-                showDashboard(JSON.parse(userInfo));
-            }
-        });
-
-        // Login form submission
-        loginForm.addEventListener('submit', async (e) => {
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
-            await login(email, password);
-        });
-
-        // Demo login function - no API calls
-        async function login(email, password) {
-            showLoading(true);
-            hideError();
-
-            // Simulate authentication delay for realistic feel
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            try {
-                const user = DEMO_USERS[email];
-                
-                if (user && user.password === password) {
-                    // Store user info for demo session
-                    localStorage.setItem('demo_user_info', JSON.stringify(user));
-                    localStorage.setItem('demo_login_time', new Date().toISOString());
-                    
-                    // Show success and dashboard
-                    showDashboard(user);
-                } else {
-                    showError('Invalid credentials. Please use: admin@pmerit.com / admin123');
-                }
-            } catch (error) {
-                showError('Authentication error. Please try again.');
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // Show dashboard with user info
-        function showDashboard(userInfo) {
-            loginSection.style.display = 'none';
-            dashboardSection.style.display = 'block';
-
-            // Update user interface
-            document.getElementById('userName').textContent = userInfo.username;
-            document.getElementById('userAvatar').textContent = userInfo.username.charAt(0).toUpperCase();
-            
-            const tierBadge = document.getElementById('tierBadge');
-            if (userInfo.tier_level === 1) {
-                tierBadge.textContent = 'Tier 1 - Super Admin';
-                tierBadge.className = 'tier-badge tier-1';
+            if (email === 'admin@pmerit.com' && password === 'SuperAdmin123!') {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('dashboardSection').style.display = 'block';
             } else {
-                tierBadge.textContent = 'Tier 2 - Admin';
-                tierBadge.className = 'tier-badge tier-2';
-            }
-        }
-
-        // Logout function
-        function logout() {
-            localStorage.removeItem('demo_user_info');
-            localStorage.removeItem('demo_login_time');
-            
-            loginSection.style.display = 'block';
-            dashboardSection.style.display = 'none';
-            
-            // Reset form with default values
-            document.getElementById('email').value = 'admin@pmerit.com';
-            document.getElementById('password').value = 'admin123';
-        }
-
-        // Utility functions
-        function showLoading(show) {
-            loading.style.display = show ? 'block' : 'none';
-            document.getElementById('loginBtn').disabled = show;
-        }
-
-        function showError(message) {
-            errorAlert.textContent = message;
-            errorAlert.style.display = 'block';
-        }
-
-        function hideError() {
-            errorAlert.style.display = 'none';
-        }
-
-        // Demo functionality
-        function testIntegration() {
-            const loginTime = localStorage.getItem('demo_login_time');
-            const userInfo = JSON.parse(localStorage.getItem('demo_user_info') || '{}');
-            
-            alert(`🔧 Integration Test Results:\n\n✅ Web Portal: Operational\n✅ Authentication: Working\n✅ User Session: Active\n✅ Tier Level: ${userInfo.tier_level}\n✅ Global CDN: Cloudflare\n✅ Deployment: GitHub Pages\n\nLogin Time: ${loginTime ? new Date(loginTime).toLocaleString() : 'N/A'}\n\n🚀 System ready for backend integration!`);
-        }
-
-        function viewSystemInfo() {
-            const userInfo = JSON.parse(localStorage.getItem('demo_user_info') || '{}');
-            
-            const systemInfo = `🎓 Pmerit AI Educational Platform
-================================
-
-📊 Portal Information:
-• URL: ${window.location.href}
-• Status: Live and Operational
-• CDN: Cloudflare Global Network
-• Deployment: GitHub Pages Auto-Deploy
-
-👤 Current Session:
-• User: ${userInfo.email || 'Not logged in'}
-• Username: ${userInfo.username || 'N/A'}
-• Tier Level: ${userInfo.tier_level || 'N/A'}
-• Privileges: ${Object.keys(userInfo.admin_privileges || {}).length} permissions
-
-🔧 Integration Status:
-✅ Frontend Portal - Live
-✅ Cloudflare CDN - Active  
-✅ GitHub Auto-Deploy - Working
-✅ Demo Authentication - Functional
-🔧 Backend API - Ready for integration
-
-🌍 Global Mission:
-Breaking poverty cycles through accessible education serving Nigerian students and underserved communities worldwide.`;
-            
-            alert(systemInfo);
-        }
-
-        // Auto-fill demo credentials
-        document.getElementById('email').addEventListener('change', function() {
-            const email = this.value;
-            const passwordField = document.getElementById('password');
-            
-            if (email === 'admin@pmerit.com') {
-                passwordField.value = 'admin123';
-            } else if (email === 'demo@pmerit.com') {
-                passwordField.value = 'demo123';
+                document.getElementById('errorAlert').textContent = 'Invalid credentials';
+                document.getElementById('errorAlert').style.display = 'block';
             }
         });
-
-        // Pre-fill credentials for easy demo access
-        document.getElementById('password').value = 'admin123';
+        function logout() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('dashboardSection').style.display = 'none';
+            document.getElementById('errorAlert').style.display = 'none';
+        }
     </script>
 </body>
 </html>
