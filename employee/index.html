@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PMERIT AI - Employee Portal (Tier 2)</title>
+    <style>
+        body{font-family:system-ui;background:#f9fafb;margin:0;padding:20px;}
+        .container{max-width:1200px;margin:0 auto;}
+        .employee-header{background:linear-gradient(135deg,#7c3aed,#2563eb);padding:1.5rem;border-radius:12px;margin-bottom:2rem;color:white;display:flex;align-items:center;gap:1rem;}
+        .user-avatar{width:60px;height:60px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:bold;}
+        .tier-badge{background:#059669;color:white;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;}
+        .logout-btn{margin-left:auto;padding:8px 16px;background:rgba(255,255,255,0.2);color:white;border:none;border-radius:6px;cursor:pointer;}
+        .status-banner{display:flex;align-items:center;gap:1rem;background:#f0f9ff;padding:1rem;border-radius:8px;border-left:4px solid #059669;margin-bottom:2rem;}
+        .status-indicator{width:12px;height:12px;border-radius:50%;background:#059669;}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:3rem;}
+        .stat-card{background:white;padding:1.5rem;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+        .stat-card h3{color:#7c3aed;font-size:2rem;margin-bottom:0.5rem;}
+        .tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;}
+        .tool-card{background:white;padding:2rem;border-radius:12px;text-align:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:transform 0.2s;}
+        .tool-card:hover{transform:translateY(-2px);}
+        .tool-icon{font-size:2.5rem;margin-bottom:1rem;}
+        .access-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;}
+        .access-link{display:flex;align-items:center;gap:1rem;padding:1.5rem;background:white;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+        .access-icon{font-size:2rem;min-width:50px;}
+        @media(max-width:768px){.employee-header{flex-direction:column;text-align:center;} .stats-grid,.tool-grid,.access-grid{grid-template-columns:1fr;}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="employee-header">
+            <div class="user-avatar">E</div>
+            <div>
+                <h2 id="employeeName">Employee User</h2>
+                <span class="tier-badge">TIER 2 - EMPLOYEE</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </header>
+
+        <div class="status-banner">
+            <span class="status-indicator"></span>
+            <p>Employee portal operational and ready for educational content management</p>
+        </div>
+
+        <main>
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <h3>100%</h3>
+                    <p>Portal Uptime</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Live</h3>
+                    <p>Global Access</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Ready</h3>
+                    <p>Integration Status</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Secure</h3>
+                    <p>Authentication</p>
+                </div>
+            </section>
+
+            <section>
+                <h2 style="text-align:center;margin-bottom:2rem;">Employee Management Tools</h2>
+                <div class="tool-grid">
+                    <div class="tool-card" onclick="showComingSoon('Content Management')">
+                        <div class="tool-icon">📚</div>
+                        <h3>Content Management</h3>
+                        <p>Manage educational materials and course content</p>
+                    </div>
+                    <div class="tool-card" onclick="showComingSoon('Student Management')">
+                        <div class="tool-icon">👥</div>
+                        <h3>Student Management</h3>
+                        <p>Monitor student progress and engagement</p>
+                    </div>
+                    <div class="tool-card" onclick="showComingSoon('Analytics Dashboard')">
+                        <div class="tool-icon">📊</div>
+                        <h3>Analytics Dashboard</h3>
+                        <p>View platform usage and performance metrics</p>
+                    </div>
+                    <div class="tool-card" onclick="showComingSoon('Student Support')">
+                        <div class="tool-icon">🎧</div>
+                        <h3>Student Support</h3>
+                        <p>Handle student inquiries and support tickets</p>
+                    </div>
+                </div>
+            </section>
+
+            <section style="margin-top:3rem;">
+                <h2 style="text-align:center;margin-bottom:2rem;">Quick Access</h2>
+                <div class="access-grid">
+                    <a href="../index.html" class="access-link" onclick="return checkTierAccess()">
+                        <span class="access-icon">🛡️</span>
+                        <div>
+                            <h3>Super Admin Portal</h3>
+                            <p>Tier 1 Access Required</p>
+                        </div>
+                    </a>
+                    <a href="https://pmerit-ai-platform.pages.dev" class="access-link">
+                        <span class="access-icon">🚀</span>
+                        <div>
+                            <h3>Main Platform</h3>
+                            <p>Service platform access</p>
+                        </div>
+                    </a>
+                    <a href="http://localhost:9011/docs" class="access-link">
+                        <span class="access-icon">⚡</span>
+                        <div>
+                            <h3>API Gateway</h3>
+                            <p>Employee API endpoints</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer style="text-align:center;color:#6b7280;margin-top:3rem;padding-top:2rem;border-top:1px solid #e5e7eb;">
+            <p>&copy; 2025 PMERIT AI Educational Platform - Employee Portal</p>
+            <p>Breaking poverty cycles through accessible education worldwide</p>
+        </footer>
+    </div>
+
+    <script>
+        // Load employee profile
+        const employeeName = localStorage.getItem('pmerit_user_name') || 'Employee User';
+        document.getElementById('employeeName').textContent = employeeName;
+        
+        function logout() {
+            localStorage.clear();
+            alert('✅ Employee logout successful');
+            window.location.href = 'login.html';
+        }
+        
+        function checkTierAccess() {
+            alert('🔒 Access Denied: Super Admin (Tier 1) access required');
+            return false;
+        }
+        
+        function showComingSoon(tool) {
+            alert('🚀 ' + tool + ' - Coming Soon in Next Development Phase');
+        }
+        
+        console.log('👥 Employee Portal (Tier 2) Loaded Successfully');
+    </script>
+</body>
+</html>
