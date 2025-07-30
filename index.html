@@ -500,7 +500,7 @@
         // Test API connection
         async function testAPIConnection() {
             try {
-                const response = await fetch(`${API_BASE}/health`, {
+                const response = await fetch(`https://1a33795c3b6f.ngrok-free.app/health`, {
                     headers: {
                         'ngrok-skip-browser-warning': 'true',
                         'Content-Type': 'application/json'
