@@ -362,6 +362,25 @@
             cursor: pointer;
             font-size: 1rem;
         }
+
+        .connection-status {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
@@ -376,6 +395,8 @@
                 <h2 class="welcome-title">🌟 Welcome to Tier 1 Portal!</h2>
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
+
+            <div id="connection-status" class="connection-status" style="display: none;"></div>
 
             <div class="tabs">
                 <button class="tab active" onclick="showTab('overview')">📊 Overview</button>
@@ -422,6 +443,7 @@
                     <p>✅ Global CDN via Cloudflare</p>
                     <p>✅ Database integration active</p>
                     <p>✅ Email system configured</p>
+                    <p>✅ ngrok tunnel: <span id="api-status">Testing...</span></p>
                 </div>
             </div>
         </div>
@@ -471,8 +493,46 @@
 
         // Initialize the portal
         document.addEventListener('DOMContentLoaded', function() {
+            testAPIConnection();
             loadEmployees();
         });
+
+        // Test API connection
+        async function testAPIConnection() {
+            try {
+                const response = await fetch(`${API_BASE}/health`, {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showConnectionStatus(true, `✅ Connected to ${data.service}`);
+                    document.getElementById('api-status').textContent = '✅ Connected';
+                } else {
+                    showConnectionStatus(false, '❌ API health check failed');
+                    document.getElementById('api-status').textContent = '❌ Failed';
+                }
+            } catch (error) {
+                showConnectionStatus(false, `❌ Connection failed: ${error.message}`);
+                document.getElementById('api-status').textContent = '❌ Error';
+            }
+        }
+
+        // Show connection status
+        function showConnectionStatus(success, message) {
+            const statusDiv = document.getElementById('connection-status');
+            statusDiv.style.display = 'block';
+            statusDiv.className = success ? 'connection-status status-success' : 'connection-status status-error';
+            statusDiv.textContent = message;
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
 
         // Tab management
         function showTab(tabName) {
@@ -500,9 +560,18 @@
         async function loadEmployees() {
             try {
                 console.log('Loading employees from API...');
-                const response = await fetch(`${API_BASE}/employees`);
-                const data = await response.json();
+                const response = await fetch(`${API_BASE}/employees`, {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true',
+                        'Content-Type': 'application/json'
+                    }
+                });
                 
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
                 console.log('API Response:', data);
                 
                 if (data.success) {
@@ -517,7 +586,7 @@
             } catch (error) {
                 console.error('Error loading employees:', error);
                 document.getElementById('employee-list').innerHTML = 
-                    '<div class="no-employees">Error connecting to server</div>';
+                    `<div class="no-employees">Error connecting to server<br><small>${error.message}</small></div>`;
             }
         }
 
@@ -589,16 +658,21 @@
                 const response = await fetch(`${API_BASE}/employees/create`, {
                     method: 'POST',
                     headers: {
+                        'ngrok-skip-browser-warning': 'true',
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(employeeData)
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
                 const result = await response.json();
                 console.log('Add employee result:', result);
 
                 if (result.success) {
-                    alert(`Employee ${employeeData.full_name} added successfully!\nEmail sent: ${result.email_sent}`);
+                    alert(`Employee ${employeeData.full_name} added successfully!\nEmail sent: ${result.email_sent ? '✅ Yes' : '❌ No'}`);
                     closeAddEmployeeModal();
                     loadEmployees(); // Reload the employee list
                 } else {
@@ -606,7 +680,7 @@
                 }
             } catch (error) {
                 console.error('Error adding employee:', error);
-                alert('Error adding employee. Please try again.');
+                alert(`Error adding employee: ${error.message}`);
             }
         });
 
@@ -615,8 +689,16 @@
             try {
                 console.log('Resending invitation for employee ID:', employeeId);
                 const response = await fetch(`${API_BASE}/employees/${employeeId}/resend-invitation`, {
-                    method: 'POST'
+                    method: 'POST',
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true',
+                        'Content-Type': 'application/json'
+                    }
                 });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
 
                 const result = await response.json();
                 console.log('Resend result:', result);
@@ -629,7 +711,7 @@
                 }
             } catch (error) {
                 console.error('Error resending invitation:', error);
-                alert('Error resending invitation. Please try again.');
+                alert(`Error resending invitation: ${error.message}`);
             }
         }
 
