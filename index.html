@@ -695,4 +695,100 @@
         }
 
         // Function to render employee cards
-        function renderEmployees(employees
+        function renderEmployees(employees) {
+            const employeeList = document.getElementById('employee-list');
+            employeeList.innerHTML = '';
+            if (employees.length === 0) {
+                employeeList.innerHTML = '<div class="no-employees"><p>No employees found. Click "+ Add Employee" to get started.</p></div>';
+                return;
+            }
+            employees.forEach(employee => {
+                const statusClass = employee.status === 'active' ? 'status-active' : 'status-pending';
+                const employeeCard = document.createElement('div');
+                employeeCard.className = 'employee-card';
+                employeeCard.innerHTML = `
+                    <div class="employee-info">
+                        <h3>${employee.fullName}</h3>
+                        <p><strong>Email:</strong> ${employee.email}</p>
+                        <p><strong>Department:</strong> ${employee.department}</p>
+                        <p><strong>Role:</strong> ${employee.role}</p>
+                    </div>
+                    <div class="employee-actions">
+                        <span class="status-badge ${statusClass}">${employee.status}</span>
+                        ${employee.status === 'pending' ? `<button class="resend-btn" onclick="resendInvitation('${employee.id}')" aria-label="Resend Invitation for ${employee.fullName}">Resend</button>` : ''}
+                        <button class="remove-btn" onclick="showRemoveEmployeeModal('${employee.id}', '${employee.fullName}')" aria-label="Remove Employee ${employee.fullName}">🗑️ Remove</button>
+                    </div>
+                `;
+                employeeList.appendChild(employeeCard);
+            });
+        }
+
+        // Modal functions
+        function showAddEmployeeModal() {
+            document.getElementById('addEmployeeModal').style.display = 'flex';
+        }
+
+        function closeAddEmployeeModal() {
+            document.getElementById('addEmployeeModal').style.display = 'none';
+        }
+
+        function showRemoveEmployeeModal(employeeId, employeeName) {
+            const modal = document.getElementById('removeEmployeeModal');
+            document.getElementById('removeEmployeeName').textContent = employeeName;
+            modal.dataset.employeeId = employeeId;
+            modal.style.display = 'flex';
+        }
+
+        function closeRemoveEmployeeModal() {
+            document.getElementById('removeEmployeeModal').style.display = 'none';
+        }
+
+        // Placeholder for resendInvitation to prevent JS errors
+        function resendInvitation(id) {
+            showCustomAlert('Resend invitation feature coming soon!');
+        }
+
+        // Function to add a new employee
+        async function handleAddEmployee(event) {
+            event.preventDefault();
+            const form = event.target;
+            const newEmployee = {
+                fullName: form.fullName.value,
+                email: form.email.value,
+                department: form.department.value,
+                role: form.role.value
+            };
+
+            try {
+                const response = await fetchWithRetry(`${API_BASE}/employees`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newEmployee)
+                });
+                const addedEmployee = await response.json();
+                loadEmployees(); // Reload employees to see the new addition
+                closeAddEmployeeModal();
+                showCustomAlert(`Employee ${addedEmployee.fullName} added successfully and invitation sent.`);
+            } catch (error) {
+                showCustomAlert('Failed to add employee. Please try again.');
+            }
+        }
+
+        // Function to confirm and remove an employee
+        async function confirmRemoveEmployee() {
+            const modal = document.getElementById('removeEmployeeModal');
+            const employeeId = modal.dataset.employeeId;
+            try {
+                await fetchWithRetry(`${API_BASE}/employees/${employeeId}`, {
+                    method: 'DELETE'
+                });
+                loadEmployees(); // Reload employees after removal
+                closeRemoveEmployeeModal();
+                showCustomAlert('Employee removed successfully!');
+            } catch (error) {
+                showCustomAlert('Failed to remove employee. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
