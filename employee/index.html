@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PMERIT AI - Employee Service Management Portal</title>
-    <!-- Combined Modular CSS for "index_test" and Employee Portal -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -282,6 +281,34 @@
             font-size: 2rem;
             min-width: 50px;
         }
+        /* New Styles for Top Plate Buttons */
+        .top-plate-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        .plate-button {
+            background: #fff;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: #4f46e5;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            text-align: center;
+        }
+        .plate-button:hover {
+            background: #e0e7ff;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
         /* Right Sidebar (Assessments, Discovery) */
         .discovery-section {
             margin-bottom: 2rem;
@@ -334,6 +361,7 @@
             .employee-header { flex-direction: column; text-align: center; }
             .stats-grid, .tool-grid, .access-grid { grid-template-columns: 1fr; }
             .main-content { flex-direction: column; }
+            .top-plate-buttons { flex-direction: column; align-items: center; }
         }
         footer {
             text-align: center;
@@ -347,7 +375,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Employee Header -->
         <header class="employee-header">
             <div class="user-avatar">E</div>
             <div>
@@ -356,12 +383,10 @@
             </div>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </header>
-        <!-- Status Banner -->
         <div class="status-banner">
             <span class="status-indicator"></span>
             <p>Employee portal operational and ready for educational content management</p>
         </div>
-        <!-- Portal Stats -->
         <section class="stats-grid">
             <div class="stat-card">
                 <h3>100%</h3>
@@ -380,55 +405,18 @@
                 <p>Authentication</p>
             </div>
         </section>
-        <!-- Main Content Area (Sidebar + Chat/Tools + Sidebar) -->
+
+        <div class="top-plate-buttons">
+            <div class="plate-button" onclick="showComingSoon('Content Management')">Content Management</div>
+            <div class="plate-button" onclick="showComingSoon('Student Management')">Student Management</div>
+            <div class="plate-button" onclick="showComingSoon('Analytics Dashboard')">Analytics Dashboard</div>
+            <div class="plate-button" onclick="showComingSoon('Student Support')">Student Support</div>
+            <div class="plate-button" onclick="showComingSoon('Super Admin Portal')">Super Admin Portal</div>
+            <div class="plate-button" onclick="showComingSoon('Main Platform')">Main Platform</div>
+            <div class="plate-button" onclick="showComingSoon('API Gateway')">API Gateway</div>
+        </div>
+
         <main class="main-content">
-            <!-- Left Sidebar: Quick Actions -->
-            <aside class="sidebar-left" id="leftSidebar">
-                <div class="sidebar-header">
-                    <div class="avatar-circle">
-                        <span class="avatar-icon">🤖</span>
-                    </div>
-                    <div class="avatar-info">
-                        <h3>Gabriel AI</h3>
-                        <p>Your Learning Guide</p>
-                    </div>
-                </div>
-                <div class="quick-actions">
-                    <div class="action-item" data-action="text-to-speech">
-                        <span class="icon">🎧</span>
-                        <span class="label">Text-to-Speech</span>
-                    </div>
-                    <div class="action-item" data-action="dark-mode">
-                        <span class="icon">🌙</span>
-                        <span class="label">Dark Mode</span>
-                    </div>
-                    <div class="action-item" data-action="my-profile">
-                        <span class="icon">👤</span>
-                        <span class="label">My Profile</span>
-                    </div>
-                    <div class="action-item" data-action="settings">
-                        <span class="icon">⚙️</span>
-                        <span class="label">Settings</span>
-                    </div>
-                    <div class="action-item" data-action="assessments">
-                        <span class="icon">📋</span>
-                        <span class="label">Assessments</span>
-                    </div>
-                    <div class="action-item" data-action="subjects">
-                        <span class="icon">📚</span>
-                        <span class="label">Subjects</span>
-                    </div>
-                    <div class="action-item" data-action="progress">
-                        <span class="icon">📊</span>
-                        <span class="label">Progress</span>
-                    </div>
-                    <div class="action-item" data-action="help">
-                        <span class="icon">❓</span>
-                        <span class="label">Help</span>
-                    </div>
-                </div>
-            </aside>
-            <!-- Center: Employee Management Tools + Chat -->
             <section class="chat-container">
                 <div class="chat-header">
                     <h1>Empowering Learning Through Innovation</h1>
@@ -461,92 +449,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Employee Management Tools -->
-                <h2 class="section-title">Employee Management Tools</h2>
-                <div class="tool-grid">
-                    <div class="tool-card" onclick="showComingSoon('Content Management')">
-                        <div class="tool-icon">📚</div>
-                        <h3>Content Management</h3>
-                        <p>Manage educational materials and course content</p>
-                    </div>
-                    <div class="tool-card" onclick="showComingSoon('Student Management')">
-                        <div class="tool-icon">👥</div>
-                        <h3>Student Management</h3>
-                        <p>Monitor student progress and engagement</p>
-                    </div>
-                    <div class="tool-card" onclick="showComingSoon('Analytics Dashboard')">
-                        <div class="tool-icon">📊</div>
-                        <h3>Analytics Dashboard</h3>
-                        <p>View platform usage and performance metrics</p>
-                    </div>
-                    <div class="tool-card" onclick="showComingSoon('Student Support')">
-                        <div class="tool-icon">🎧</div>
-                        <h3>Student Support</h3>
-                        <p>Handle student inquiries and support tickets</p>
-                    </div>
-                </div>
-                <!-- Quick Access -->
-                <h2 class="section-title">Quick Access</h2>
-                <div class="access-grid">
-                    <a href="../index.html" class="access-link" onclick="return checkTierAccess()">
-                        <span class="access-icon">🛡️</span>
-                        <div>
-                            <h3>Super Admin Portal</h3>
-                            <p>Tier 1 Access Required</p>
-                        </div>
-                    </a>
-                    <a href="https://pmerit-ai-platform.pages.dev" class="access-link">
-                        <span class="access-icon">🚀</span>
-                        <div>
-                            <h3>Main Platform</h3>
-                            <p>Service platform access</p>
-                        </div>
-                    </a>
-                    <a href="http://localhost:9011/docs" class="access-link">
-                        <span class="access-icon">⚡</span>
-                        <div>
-                            <h3>API Gateway</h3>
-                            <p>Employee API endpoints</p>
-                        </div>
-                    </a>
-                </div>
             </section>
-            <!-- Right Sidebar: Discovery + Assessments -->
-            <aside class="sidebar-right" id="rightSidebar">
-                <div class="discovery-section">
-                    <div class="section-header">
-                        <span class="section-icon">🧠</span>
-                        <h3>Discover Your Path</h3>
-                    </div>
-                    <p>Personalized assessments to guide your learning journey</p>
-                </div>
-                <div class="assessment-cards">
-                    <div class="assessment-card" data-assessment="learning-style">
-                        <div class="card-header">
-                            <span class="card-icon">🎯</span>
-                            <h4>Learning Style Assessment</h4>
-                        </div>
-                        <p>Discover how you learn best and personalize your experience</p>
-                        <button class="assessment-btn">Start Assessment →</button>
-                    </div>
-                    <div class="assessment-card" data-assessment="interest-profiler">
-                        <div class="card-header">
-                            <span class="card-icon">💡</span>
-                            <h4>Interest Profiler</h4>
-                        </div>
-                        <p>Explore subjects and fields that match your natural interests</p>
-                        <button class="assessment-btn">Discover Interests →</button>
-                    </div>
-                    <div class="assessment-card" data-assessment="skills-assessment">
-                        <div class="card-header">
-                            <span class="card-icon">⚡</span>
-                            <h4>Skills Assessment</h4>
-                        </div>
-                        <p>Assess your current abilities and identify growth opportunities</p>
-                        <button class="assessment-btn">Evaluate Skills →</button>
-                    </div>
-                </div>
-            </aside>
         </main>
         <footer>
             <p>&copy; 2025 PMERIT AI Educational Platform - Employee Portal</p>
@@ -605,17 +508,17 @@
             }
         });
         // Quick Actions (Sidebar)
-        document.querySelectorAll('.action-item').forEach(item => {
-            item.addEventListener('click', function() {
-                alert('🚀 ' + item.querySelector('.label').textContent + ' - Coming Soon');
-            });
-        });
+        // document.querySelectorAll('.action-item').forEach(item => {
+        //     item.addEventListener('click', function() {
+        //         alert('🚀 ' + item.querySelector('.label').textContent + ' - Coming Soon');
+        //     });
+        // });
         // Assessments (Sidebar)
-        document.querySelectorAll('.assessment-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                alert('🧪 Assessment features coming soon for employees!');
-            });
-        });
+        // document.querySelectorAll('.assessment-btn').forEach(btn => {
+        //     btn.addEventListener('click', function() {
+        //         alert('🧪 Assessment features coming soon for employees!');
+        //     });
+        // });
         console.log('👥 Employee Portal (Tier 2) Loaded Successfully');
     </script>
 </body>
