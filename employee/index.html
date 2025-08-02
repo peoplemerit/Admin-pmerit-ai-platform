@@ -3,27 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PMERIT AI - Employee Portal (Tier 2)</title>
+    <title>PMERIT AI - Employee Service Management Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body{font-family:system-ui;background:#f9fafb;margin:0;padding:20px;}
-        .container{max-width:1200px;margin:0 auto;}
-        .employee-header{background:linear-gradient(135deg,#7c3aed,#2563eb);padding:1.5rem;border-radius:12px;margin-bottom:2rem;color:white;display:flex;align-items:center;gap:1rem;}
-        .user-avatar{width:60px;height:60px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:bold;}
-        .tier-badge{background:#059669;color:white;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;}
-        .logout-btn{margin-left:auto;padding:8px 16px;background:rgba(255,255,255,0.2);color:white;border:none;border-radius:6px;cursor:pointer;}
-        .status-banner{display:flex;align-items:center;gap:1rem;background:#f0f9ff;padding:1rem;border-radius:8px;border-left:4px solid #059669;margin-bottom:2rem;}
-        .status-indicator{width:12px;height:12px;border-radius:50%;background:#059669;}
-        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:3rem;}
-        .stat-card{background:white;padding:1.5rem;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-        .stat-card h3{color:#7c3aed;font-size:2rem;margin-bottom:0.5rem;}
-        .tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;}
-        .tool-card{background:white;padding:2rem;border-radius:12px;text-align:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:transform 0.2s;}
-        .tool-card:hover{transform:translateY(-2px);}
-        .tool-icon{font-size:2.5rem;margin-bottom:1rem;}
-        .access-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;}
-        .access-link{display:flex;align-items:center;gap:1rem;padding:1.5rem;background:white;border-radius:12px;text-decoration:none;color:inherit;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-        .access-icon{font-size:2rem;min-width:50px;}
-        @media(max-width:768px){.employee-header{flex-direction:column;text-align:center;} .stats-grid,.tool-grid,.access-grid{grid-template-columns:1fr;}}
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f9fafb;
+            margin: 0;
+            padding: 0;
+        }
+        .container, .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        .employee-header {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 1.5rem 2rem 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .tier-badge {
+            background: #059669;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .logout-btn {
+            margin-left: auto;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .status-banner {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #f0f9ff;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #059669;
+            margin: 0 1.5rem 2rem 1.5rem;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #059669;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+            gap: 1.5rem;
+            margin: 0 1.5rem 2rem 1.5rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .stat-card h3 {
+            color: #7c3aed;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 0 1.5rem;
+        }
+        .sidebar-left, .sidebar-right {
+            flex: 1 0 260px;
+            min-width: 220px;
+            max-width: 320px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 2rem;
+            height: fit-content;
+        }
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .avatar-circle {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .avatar-info h3 {
+            margin: 0 0 2px 0;
+            font-size: 1.1rem;
+        }
+        .quick-actions {
+            margin-top: 1rem;
+        }
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem 0.7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .action-item:hover {
+            background: #f0f9ff;
+        }
+        .action-item .icon {
+            font-size: 1.3rem;
+        }
+        .chat-container {
+            flex: 2 1 520px;
+            min-width: 320px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            padding: 1rem 1.5rem 0.5rem 1.5rem;
+            border-bottom: 1px solid #eef2f7;
+            text-align: left;
+        }
+        .chat-header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .chat-header p {
+            margin: 0.4rem 0 0 0;
+            color: #6b7280;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 1.2rem 1.5rem 0.5rem 1.5rem;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 1rem;
+        }
+        .ai-message .message-content {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+        }
+        .chat-input-container {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #eef2f7;
+            background: #fafbfc;
+        }
+        .chat-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .chat-input-wrapper input[type="text"] {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 7px;
+            border: 1px solid #cbd5e1;
+            font-size: 1rem;
+        }
+        .send-button {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 0.7rem 1.3rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+        .send-button:hover {
+            background: #2563eb;
+        }
+        .chat-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+        .footer-center {
+            display: flex;
+            gap: 1.2rem;
+        }
+        .footer-right {
+            color: #059669;
+            font-weight: 500;
+        }
+        /* Employee Tools & Quick Access (from original portal) */
+        .section-title {
+            text-align: center;
+            margin: 2rem 0 1.2rem 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4f46e5;
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .tool-card {
+            background: white;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.18s;
+        }
+        .tool-card:hover {
+            transform: translateY(-2px) scale(1.03);
+        }
+        .tool-icon {
+            font-size: 2.3rem;
+            margin-bottom: 1rem;
+        }
+        .access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .access-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .access-icon {
+            font-size: 2rem;
+            min-width: 50px;
+        }
+        /* New Styles for Top Plate Buttons */
+        .top-plate-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        .plate-button {
+            background: #fff;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: #4f46e5;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            text-align: center;
+        }
+        .plate-button:hover {
+            background: #e0e7ff;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        /* Right Sidebar (Assessments, Discovery) */
+        .discovery-section {
+            margin-bottom: 2rem;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .section-icon {
+            font-size: 1.6rem;
+        }
+        .assessment-cards .assessment-card {
+            background: #f0f9ff;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            padding: 1rem 1rem 0.7rem 1rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.4rem;
+        }
+        .card-icon {
+            font-size: 1.2rem;
+        }
+        .assessment-btn {
+            background: #059669;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.36rem 1.15rem;
+            font-size: 0.98rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        @media(max-width:1100px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .sidebar-left, .sidebar-right, .chat-container {
+                max-width: 100%;
+                width: 100%;
+                margin-bottom: 2rem;
+            }
+        }
+        @media(max-width:768px){
+            .employee-header { flex-direction: column; text-align: center; }
+            .stats-grid, .tool-grid, .access-grid { grid-template-columns: 1fr; }
+            .main-content { flex-direction: column; }
+            .top-plate-buttons { flex-direction: column; align-items: center; }
+        }
+        footer {
+            text-align: center;
+            color: #6b7280;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -36,112 +383,142 @@
             </div>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </header>
-
         <div class="status-banner">
             <span class="status-indicator"></span>
             <p>Employee portal operational and ready for educational content management</p>
         </div>
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3>100%</h3>
+                <p>Portal Uptime</p>
+            </div>
+            <div class="stat-card">
+                <h3>Live</h3>
+                <p>Global Access</p>
+            </div>
+            <div class="stat-card">
+                <h3>Ready</h3>
+                <p>Integration Status</p>
+            </div>
+            <div class="stat-card">
+                <h3>Secure</h3>
+                <p>Authentication</p>
+            </div>
+        </section>
 
-        <main>
-            <section class="stats-grid">
-                <div class="stat-card">
-                    <h3>100%</h3>
-                    <p>Portal Uptime</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Live</h3>
-                    <p>Global Access</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Ready</h3>
-                    <p>Integration Status</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Secure</h3>
-                    <p>Authentication</p>
-                </div>
-            </section>
+        <div class="top-plate-buttons">
+            <div class="plate-button" onclick="showComingSoon('Content Management')">Content Management</div>
+            <div class="plate-button" onclick="showComingSoon('Student Management')">Student Management</div>
+            <div class="plate-button" onclick="showComingSoon('Analytics Dashboard')">Analytics Dashboard</div>
+            <div class="plate-button" onclick="showComingSoon('Student Support')">Student Support</div>
+            <div class="plate-button" onclick="showComingSoon('Super Admin Portal')">Super Admin Portal</div>
+            <div class="plate-button" onclick="showComingSoon('Main Platform')">Main Platform</div>
+            <div class="plate-button" onclick="showComingSoon('API Gateway')">API Gateway</div>
+        </div>
 
-            <section>
-                <h2 style="text-align:center;margin-bottom:2rem;">Employee Management Tools</h2>
-                <div class="tool-grid">
-                    <div class="tool-card" onclick="showComingSoon('Content Management')">
-                        <div class="tool-icon">📚</div>
-                        <h3>Content Management</h3>
-                        <p>Manage educational materials and course content</p>
-                    </div>
-                    <div class="tool-card" onclick="showComingSoon('Student Management')">
-                        <div class="tool-icon">👥</div>
-                        <h3>Student Management</h3>
-                        <p>Monitor student progress and engagement</p>
-                    </div>
-                    <div class="tool-card" onclick="showComingSoon('Analytics Dashboard')">
-                        <div class="tool-icon">📊</div>
-                        <h3>Analytics Dashboard</h3>
-                        <p>View platform usage and performance metrics</p>
-                    </div>
-                    <div class="tool-card" onclick="showComingSoon('Student Support')">
-                        <div class="tool-icon">🎧</div>
-                        <h3>Student Support</h3>
-                        <p>Handle student inquiries and support tickets</p>
+        <main class="main-content">
+            <section class="chat-container">
+                <div class="chat-header">
+                    <h1>Empowering Learning Through Innovation</h1>
+                    <p>Accessible, high-quality education for global opportunities</p>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai-message">
+                        <div class="message-content">
+                            <strong>Gabriel AI:</strong> Welcome to PMERIT! I'm here to guide your learning journey and help you manage educational services. How can I assist your employee tasks today?
+                        </div>
                     </div>
                 </div>
-            </section>
-
-            <section style="margin-top:3rem;">
-                <h2 style="text-align:center;margin-bottom:2rem;">Quick Access</h2>
-                <div class="access-grid">
-                    <a href="../index.html" class="access-link" onclick="return checkTierAccess()">
-                        <span class="access-icon">🛡️</span>
-                        <div>
-                            <h3>Super Admin Portal</h3>
-                            <p>Tier 1 Access Required</p>
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chatInput" placeholder="Ask about courses, student progress, or service status..." maxlength="1000">
+                        <button id="sendButton" class="send-button">
+                            <span class="send-icon">→</span>
+                        </button>
+                    </div>
+                    <div class="chat-footer">
+                        <div class="footer-left">
+                            <span class="char-count">0/1000</span>
                         </div>
-                    </a>
-                    <a href="https://pmerit-ai-platform.pages.dev" class="access-link">
-                        <span class="access-icon">🚀</span>
-                        <div>
-                            <h3>Main Platform</h3>
-                            <p>Service platform access</p>
+                        <div class="footer-center">
+                            <span class="status-item">🎭 Virtual Human Mode</span>
+                            <span class="status-item">📖 Read About</span>
                         </div>
-                    </a>
-                    <a href="http://localhost:9011/docs" class="access-link">
-                        <span class="access-icon">⚡</span>
-                        <div>
-                            <h3>API Gateway</h3>
-                            <p>Employee API endpoints</p>
+                        <div class="footer-right">
+                            <span class="status-connected">✅ Connected to Educational Services</span>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </section>
         </main>
-
-        <footer style="text-align:center;color:#6b7280;margin-top:3rem;padding-top:2rem;border-top:1px solid #e5e7eb;">
+        <footer>
             <p>&copy; 2025 PMERIT AI Educational Platform - Employee Portal</p>
             <p>Breaking poverty cycles through accessible education worldwide</p>
         </footer>
     </div>
-
     <script>
         // Load employee profile
         const employeeName = localStorage.getItem('pmerit_user_name') || 'Employee User';
         document.getElementById('employeeName').textContent = employeeName;
-        
+
         function logout() {
             localStorage.clear();
             alert('✅ Employee logout successful');
             window.location.href = 'login.html';
         }
-        
         function checkTierAccess() {
             alert('🔒 Access Denied: Super Admin (Tier 1) access required');
             return false;
         }
-        
         function showComingSoon(tool) {
             alert('🚀 ' + tool + ' - Coming Soon in Next Development Phase');
         }
-        
+        // Chat message input (from index_test)
+        const chatInput = document.getElementById("chatInput");
+        const sendButton = document.getElementById("sendButton");
+        const chatMessages = document.getElementById("chatMessages");
+        const charCount = document.querySelector(".char-count");
+        chatInput.addEventListener('input', function() {
+            charCount.textContent = chatInput.value.length + "/1000";
+        });
+        sendButton.addEventListener('click', function() {
+            const msg = chatInput.value.trim();
+            if(!msg) return;
+            const div = document.createElement("div");
+            div.className = "message user-message";
+            div.innerHTML = `<div class="message-content"><strong>You:</strong> ${msg}</div>`;
+            chatMessages.appendChild(div);
+            chatInput.value = "";
+            charCount.textContent = "0/1000";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            // AI response placeholder
+            setTimeout(() => {
+                const aiDiv = document.createElement("div");
+                aiDiv.className = "message ai-message";
+                aiDiv.innerHTML = `<div class="message-content"><strong>Gabriel AI:</strong> [AI response placeholder for "${msg}"]</div>`;
+                chatMessages.appendChild(aiDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 900);
+        });
+        // Allow Enter key for send
+        chatInput.addEventListener('keydown', function(e){
+            if(e.key === "Enter") {
+                sendButton.click();
+                e.preventDefault();
+            }
+        });
+        // Quick Actions (Sidebar)
+        // document.querySelectorAll('.action-item').forEach(item => {
+        //     item.addEventListener('click', function() {
+        //         alert('🚀 ' + item.querySelector('.label').textContent + ' - Coming Soon');
+        //     });
+        // });
+        // Assessments (Sidebar)
+        // document.querySelectorAll('.assessment-btn').forEach(btn => {
+        //     btn.addEventListener('click', function() {
+        //         alert('🧪 Assessment features coming soon for employees!');
+        //     });
+        // });
         console.log('👥 Employee Portal (Tier 2) Loaded Successfully');
     </script>
 </body>
