@@ -916,7 +916,8 @@
             employeeList.innerHTML = '<div class="loading">Loading employees...</div>';
             try {
                 const response = await fetchWithRetry(`${API_BASE}/employees`);
-                const employees = await response.json();
+                const data = await response.json();
+		const employees = data.employees || [];
                 renderEmployees(employees);
             } catch (error) {
                 console.error('Error loading employees:', error);
