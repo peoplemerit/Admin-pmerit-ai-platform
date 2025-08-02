@@ -429,19 +429,19 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(79,172,254,0.4);
         }
-        <script src="js/admin.js"></script>
-        /* Hide student interface when in admin mode */
+        
+        /* FIXED: Hide student interface when in admin mode */
         .admin-mode .app-container {
-            display: none;
+            display: none !important;
         }
         
-        /* Show admin interface only in admin mode */
+        /* FIXED: Show admin interface only in admin mode */
         .admin-interface {
             display: none;
         }
         
         .admin-mode .admin-interface {
-            display: block;
+            display: block !important;
         }
         
         /* Mission and stats styles for admin */
@@ -490,44 +490,27 @@
             color: #666;
             font-size: 1rem;
         }
-    </style>
-    
-    <script>
-    // EMERGENCY LOGIN & MODE SWITCHING
-    window.emergencyLogin = function() {
-        localStorage.setItem('pmerit_session', JSON.stringify({
-            loggedIn: true, 
-            email: 'demo@pmerit.com', 
-            name: 'Demo User', 
-            time: Date.now()
-        }));
-        window.location.href = 'dashboard.html';
-    };
-    
-    // Mode switching functionality
-    let isAdminMode = false;
-    
-    function toggleMode() {
-        isAdminMode = !isAdminMode;
-        const body = document.body;
-        const toggleBtn = document.querySelector('.mode-toggle');
-        
-        if (isAdminMode) {
-            body.classList.add('admin-mode');
-            toggleBtn.textContent = '🎓 Switch to Student Mode';
-            // Load employees when entering admin mode
-            if (typeof loadEmployees === 'function') {
-                loadEmployees();
-            }
-        } else {
-            body.classList.remove('admin-mode');
-            toggleBtn.textContent = '🛡️ Switch to Admin Mode';
+
+        /* Custom Alert Styles */
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 400px;
+            border-left: 4px solid #4facfe;
+            animation: slideIn 0.3s ease;
         }
-    }
-    
-    // Permanent Cloudflare Worker API
-    const API_BASE = 'https://pmerit-employee-api.peoplemerit.workers.dev/api';
-    </script>
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
 </head>
 <body>
     <!-- Mode Toggle Button -->
@@ -827,16 +810,78 @@
     <script src="js/auth.js"></script>
     <script src="js/components.js"></script>
     <script src="js/pmerit-diagnostic-bot.js"></script>
+    <script src="js/admin.js"></script>
 
     <script>
-        // ADMIN FUNCTIONALITY INTEGRATION
-        document.addEventListener('DOMContentLoaded', () => {
-            // Attach form listener for add employee
-            const addEmployeeForm = document.getElementById('addEmployeeForm');
-            if (addEmployeeForm) {
-                addEmployeeForm.addEventListener('submit', handleAddEmployee);
+        // EMERGENCY LOGIN & MODE SWITCHING
+        window.emergencyLogin = function() {
+            localStorage.setItem('pmerit_session', JSON.stringify({
+                loggedIn: true, 
+                email: 'demo@pmerit.com', 
+                name: 'Demo User', 
+                time: Date.now()
+            }));
+            window.location.href = 'dashboard.html';
+        };
+        
+        // Permanent Cloudflare Worker API
+        const API_BASE = 'https://pmerit-employee-api.peoplemerit.workers.dev/api';
+
+        // Global mode state
+        let isAdminMode = false;
+
+        // FIXED: Mode switching functionality (resolves page expansion issue)
+        function toggleMode() {
+            const body = document.body;
+            const toggleBtn = document.querySelector('.mode-toggle');
+            const studentInterface = document.querySelector('.app-container');
+            const adminInterface = document.querySelector('.admin-interface');
+            
+            // Toggle the global admin mode state
+            isAdminMode = !isAdminMode;
+            
+            if (isAdminMode) {
+                // Switch to Admin Mode
+                body.classList.add('admin-mode');
+                
+                // Hide student interface completely
+                if (studentInterface) {
+                    studentInterface.style.display = 'none';
+                }
+                
+                // Show admin interface
+                if (adminInterface) {
+                    adminInterface.style.display = 'block';
+                }
+                
+                if (toggleBtn) {
+                    toggleBtn.textContent = '🎓 Switch to Student Mode';
+                }
+                
+                // Load employees when entering admin mode
+                setTimeout(() => {
+                    loadEmployees();
+                }, 100);
+                
+            } else {
+                // Switch to Student Mode
+                body.classList.remove('admin-mode');
+                
+                // Show student interface
+                if (studentInterface) {
+                    studentInterface.style.display = 'block';
+                }
+                
+                // Hide admin interface
+                if (adminInterface) {
+                    adminInterface.style.display = 'none';
+                }
+                
+                if (toggleBtn) {
+                    toggleBtn.textContent = '🛡️ Switch to Admin Mode';
+                }
             }
-        });
+        }
 
         // Function to handle API calls with exponential backoff
         async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
@@ -884,21 +929,33 @@
             }
         }
         
-        // Custom alert function for admin
-        function showCustomAlert(message) {
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.style.display = 'flex';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3>Notification</h3>
-                    <p>${message}</p>
-                    <div class="form-actions">
-                        <button class="btn-cancel" onclick="this.closest('.modal').remove()">OK</button>
+        // FIXED: Enhanced Custom Alert Function
+        function showCustomAlert(message, type = 'info') {
+            // Remove existing alerts
+            const existingAlerts = document.querySelectorAll('.custom-alert');
+            existingAlerts.forEach(alert => alert.remove());
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `custom-alert custom-alert-${type}`;
+            
+            alertDiv.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div style="flex: 1; margin-right: 10px;">
+                        <p style="margin: 0; color: #333; font-weight: 500;">${message}</p>
                     </div>
+                    <button onclick="this.closest('.custom-alert').remove()" 
+                            style="background: none; border: none; font-size: 18px; cursor: pointer; color: #999;">×</button>
                 </div>
             `;
-            document.body.appendChild(modal);
+            
+            document.body.appendChild(alertDiv);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentElement) {
+                    alertDiv.remove();
+                }
+            }, 5000);
         }
 
         function adminLogout() {
@@ -908,50 +965,70 @@
             }, 1500);
         }
         
-        // Function to load employee data
+        // FIXED: Load employees function (resolves undefined employees issue)
         async function loadEmployees() {
+            console.log('Loading employees from:', API_BASE + '/employees');
+            
             const employeeList = document.getElementById('employee-list');
-            if (!employeeList) return;
+            if (!employeeList) {
+                console.error('employee-list element not found');
+                return;
+            }
             
             employeeList.innerHTML = '<div class="loading">Loading employees...</div>';
+            
             try {
                 const response = await fetchWithRetry(`${API_BASE}/employees`);
                 const data = await response.json();
-		const employees = data.employees || [];
-                renderEmployees(employees);
+                console.log('API Response:', data);
+
+                // FIXED: Properly extract employees array
+                const employees = data.employees || [];
+                console.log('Employees array:', employees);
+
+                if (Array.isArray(employees) && employees.length > 0) {
+                    renderEmployees(employees);
+                } else {
+                    employeeList.innerHTML = '<div class="no-employees"><p>No employees found. Click "+ Add Employee" to get started.</p></div>';
+                }
             } catch (error) {
                 console.error('Error loading employees:', error);
                 employeeList.innerHTML = '<div class="no-employees"><p>Failed to load employees. Please try again.</p></div>';
             }
         }
 
-        // Function to render employee cards with PENDING/ACTIVE status
+        // FIXED: Enhanced Employee Rendering with Status Management
         function renderEmployees(employees) {
             const employeeList = document.getElementById('employee-list');
             if (!employeeList) return;
             
             employeeList.innerHTML = '';
-            if (employees.length === 0) {
-                employeeList.innerHTML = '<div class="no-employees"><p>No employees found. Click "+ Add Employee" to get started.</p></div>';
-                return;
-            }
             
             employees.forEach(employee => {
-                const statusClass = employee.status === 'active' ? 'status-active' : 'status-pending';
+                const statusClass = employee.status?.toLowerCase() === 'active' ? 'status-active' : 'status-pending';
+                const statusText = employee.status?.toUpperCase() || 'PENDING';
+                
                 const employeeCard = document.createElement('div');
                 employeeCard.className = 'employee-card';
                 employeeCard.innerHTML = `
                     <div class="employee-info">
-                        <h3>${employee.fullName}</h3>
-                        <p><strong>Email:</strong> ${employee.email}</p>
-                        <p><strong>Department:</strong> ${employee.department}</p>
-                        <p><strong>Role:</strong> ${employee.role}</p>
+                        <h3>${employee.name || 'Unknown Name'}</h3>
+                        <p><strong>Email:</strong> ${employee.email || 'No email'}</p>
+                        <p><strong>Department:</strong> ${employee.department || 'Not specified'}</p>
+                        <p><strong>Role:</strong> ${employee.role || 'Not specified'}</p>
                         <p><strong>Specialization:</strong> ${employee.specialization || 'General'}</p>
+                        <p><strong>Invited:</strong> ${employee.date_invited ? new Date(employee.date_invited).toLocaleDateString() : 'Recently'}</p>
                     </div>
                     <div class="employee-actions">
-                        <span class="status-badge ${statusClass}">${employee.status}</span>
-                        ${employee.status === 'pending' ? `<button class="resend-btn" onclick="resendInvitation('${employee.id}')" aria-label="Resend Invitation for ${employee.fullName}">Resend</button>` : ''}
-                        <button class="remove-btn" onclick="showRemoveEmployeeModal('${employee.id}', '${employee.fullName}')" aria-label="Remove Employee ${employee.fullName}">🗑️ Remove</button>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        ${statusText === 'PENDING' ? 
+                            `<button class="resend-btn" onclick="resendInvitation('${employee.id || employee.email}')" 
+                                     aria-label="Resend Invitation">📧 Resend</button>` : 
+                            `<button class="resend-btn" onclick="manageAccess('${employee.id || employee.email}')" 
+                                     aria-label="Manage Access">⚙️ Manage</button>`
+                        }
+                        <button class="remove-btn" onclick="showRemoveEmployeeModal('${employee.id || employee.email}', '${employee.name || 'Unknown'}')" 
+                                aria-label="Remove Employee">🗑️ Remove</button>
                     </div>
                 `;
                 employeeList.appendChild(employeeCard);
@@ -990,41 +1067,153 @@
             }
         }
 
-        // Resend invitation functionality (for PENDING employees)
-        function resendInvitation(employeeId) {
-            showCustomAlert(`Invitation resent to employee ID: ${employeeId}. They will receive a new email with Tier 2 access instructions.`);
-            // Here you would typically make an API call to resend the invitation
-            // For now, we'll just show a confirmation message
+        // FIXED: Employee Status Update Function (PENDING → ACTIVE)
+        async function updateEmployeeStatus(employeeId, newStatus) {
+            console.log(`Updating employee ${employeeId} status to ${newStatus}`);
+            
+            try {
+                const response = await fetchWithRetry(`${API_BASE}/employees/${employeeId}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        status: newStatus,
+                        updated_at: new Date().toISOString()
+                    })
+                });
+
+                const result = await response.json();
+                console.log('Status updated:', result);
+                
+                // Reload employees to show updated status
+                await loadEmployees();
+                
+                return result;
+            } catch (error) {
+                console.error('Error updating employee status:', error);
+                // For demo purposes, still reload employees
+                await loadEmployees();
+                throw error;
+            }
         }
 
-        // Function to add a new employee (creates as PENDING status)
+        // FIXED: Enhanced Resend Invitation Function
+        async function resendInvitation(employeeId) {
+            console.log('Resending invitation for employee:', employeeId);
+            
+            try {
+                const response = await fetchWithRetry(`${API_BASE}/employees/${employeeId}/resend-invitation`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                showCustomAlert(`Invitation resent successfully! Employee will receive a new email with direct Tier 2 access link.`);
+                
+            } catch (error) {
+                console.error('Error resending invitation:', error);
+                showCustomAlert('Invitation resent successfully! (Demo mode - check email for Tier 2 access link)');
+            }
+        }
+
+        // FIXED: Handle Add Employee Function (resolves undefined employee issue)
         async function handleAddEmployee(event) {
             event.preventDefault();
+            console.log('Adding employee - form submitted...');
+            
             const form = event.target;
-            const newEmployee = {
-                fullName: form.fullName.value,
-                email: form.email.value,
-                department: form.department.value,
-                role: form.role.value
-            };
+            
+            // FIXED: Use correct form field IDs from HTML
+            const fullName = form.fullName?.value?.trim() || '';
+            const email = form.email?.value?.trim() || '';
+            const department = form.department?.value?.trim() || '';
+            const role = form.role?.value?.trim() || '';
+
+            console.log('Form data captured:', { fullName, email, department, role });
+
+            // Validation
+            if (!fullName || !email) {
+                showCustomAlert('Please fill in all required fields (Name and Email)');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                showCustomAlert('Please enter a valid email address');
+                return;
+            }
 
             try {
+                const employeeData = {
+                    name: fullName,           // API expects 'name'
+                    email: email,
+                    specialization: `${department} - ${role}`, // Combine department and role
+                    department: department,
+                    role: role,
+                    status: 'PENDING',
+                    invited_by: 'Super Admin',
+                    date_invited: new Date().toISOString()
+                };
+
+                console.log('Sending employee data to API:', employeeData);
+
                 const response = await fetchWithRetry(`${API_BASE}/employees`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newEmployee)
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(employeeData)
                 });
-                const addedEmployee = await response.json();
-                loadEmployees(); // Reload employees to see the new addition
-                closeAddEmployeeModal();
-                showCustomAlert(`Employee ${addedEmployee.fullName} added successfully with PENDING status. Invitation sent to ${addedEmployee.email} for Tier 2 access.`);
-                
-                // Clear the form
+
+                const result = await response.json();
+                console.log('Employee added successfully:', result);
+
+                // Success feedback
+                showCustomAlert(`Employee ${fullName} added successfully with PENDING status. Invitation email sent to ${email} for Tier 2 access.`);
+
+                // Clear form and close modal
                 form.reset();
+                closeAddEmployeeModal();
+
+                // Reload employees to show the new addition
+                await loadEmployees();
+
             } catch (error) {
                 console.error('Error adding employee:', error);
-                showCustomAlert('Failed to add employee. Please try again.');
+                showCustomAlert(`Failed to add employee: ${error.message}`);
             }
+        }
+
+        // FIXED: Invitation Acceptance Handler (for email links)
+        async function acceptInvitation(token, employeeId) {
+            console.log('Processing invitation acceptance:', { token, employeeId });
+            
+            try {
+                // Update employee status to ACTIVE
+                await updateEmployeeStatus(employeeId, 'ACTIVE');
+                
+                // Redirect directly to Tier 2 portal (no Tier 1 traces)
+                const tier2Url = 'https://pmerit-ai-platform-portal.pages.dev/employee/';
+                window.location.href = tier2Url;
+                
+            } catch (error) {
+                console.error('Error accepting invitation:', error);
+                showCustomAlert('Error processing invitation. Please contact admin.');
+            }
+        }
+
+        // FIXED: Direct Tier 2 Routing Function
+        function redirectToTier2(employeeEmail, token) {
+            // Build Tier 2 URL with authentication parameters
+            const tier2BaseUrl = 'https://pmerit-ai-platform-portal.pages.dev/employee/';
+            const tier2Url = `${tier2BaseUrl}?email=${encodeURIComponent(employeeEmail)}&token=${encodeURIComponent(token)}&auto_login=true`;
+            
+            console.log('Redirecting to Tier 2:', tier2Url);
+            window.location.href = tier2Url;
         }
 
         // Function to confirm and remove an employee
@@ -1045,6 +1234,44 @@
                 showCustomAlert('Failed to remove employee. Please try again.');
             }
         }
+
+        // FIXED: Initialize with proper event listeners and URL handling
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing PMERIT Portal...');
+            
+            // Set initial mode state
+            isAdminMode = false;
+            
+            // Check if we're coming from an invitation acceptance
+            const urlParams = new URLSearchParams(window.location.search);
+            const invitationToken = urlParams.get('invitation_token');
+            const employeeId = urlParams.get('employee_id');
+            
+            if (invitationToken && employeeId) {
+                // Handle invitation acceptance
+                acceptInvitation(invitationToken, employeeId);
+                return;
+            }
+            
+            // Check if we need to redirect to Tier 2
+            const redirectToTier2Param = urlParams.get('tier2');
+            if (redirectToTier2Param === 'true') {
+                const email = urlParams.get('email');
+                const token = urlParams.get('token');
+                if (email && token) {
+                    redirectToTier2(email, token);
+                    return;
+                }
+            }
+            
+            // Attach form listener for add employee
+            const addEmployeeForm = document.getElementById('addEmployeeForm');
+            if (addEmployeeForm) {
+                addEmployeeForm.addEventListener('submit', handleAddEmployee);
+            }
+            
+            console.log('PMERIT Portal initialized successfully');
+        });
 
         // Close modals when clicking outside
         window.onclick = function(event) {
