@@ -1,328 +1,276 @@
-// ====== COMPLETE ADMIN PANEL SYSTEM - admin.js ======
-// Replace your current admin.js with this complete working version
+// PMERIT Portal JavaScript Fix - Employee Management Functions
+// Add this to your portal's JavaScript section
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🛠️ Admin panel initializing...');
-    initializeAdminPanel();
-});
+// Updated API Base URL (make sure this is correct)
+const API_BASE = 'https://pmerit-employee-api.peoplemerit.workers.dev/api';
 
-function initializeAdminPanel() {
-    setupTabNavigation();
-    renderSubjectForm();
-    renderSubjectsList();
-    setupFormHandling();
-    setupExportButton();
-    console.log('✅ Admin panel ready!');
-}
-
-// TAB NAVIGATION
-function setupTabNavigation() {
-    const tabButtons = document.querySelectorAll('.nav-item');
-    const tabPanels = document.querySelectorAll('.tab-panel');
-
-    tabButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remove active from all tabs
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            tabPanels.forEach(panel => panel.classList.remove('active'));
-
-            // Add active to clicked tab
-            this.classList.add('active');
-            const targetPanel = document.getElementById(this.dataset.tab + '-panel');
-            if (targetPanel) {
-                targetPanel.classList.add('active');
+// Fixed: Load employees function
+async function loadEmployees() {
+    console.log('Loading employees from:', API_BASE + '/employees');
+    
+    try {
+        const response = await fetch(API_BASE + '/employees', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             }
         });
-    });
-}
 
-// SUBJECT FORM RENDERING
-function renderSubjectForm() {
-    const formContainer = document.querySelector('.add-subject-form');
-    if (!formContainer) return;
-
-    formContainer.innerHTML = `
-        <h2>🎓 Add New Subject</h2>
-        <form id="subjectForm">
-            <div class="form-group">
-                <label>Subject Title:</label>
-                <input type="text" id="subjectTitle" placeholder="e.g., Advanced Web Development" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Track:</label>
-                <select id="subjectTrack" required>
-                    <option value="">Select Track</option>
-                    <option value="core">Core Curriculum</option>
-                    <option value="remote_careers">Remote Career Specializations</option>
-                    <option value="electives">Electives</option>
-                    <option value="capstone">Capstone</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Duration:</label>
-                <input type="text" id="subjectDuration" placeholder="e.g., 6 hours" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Assessment:</label>
-                <input type="text" id="subjectAssessment" placeholder="e.g., Portfolio Project" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Description:</label>
-                <textarea id="subjectDescription" placeholder="Brief description of the subject..." required rows="3"></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>Materials (optional):</label>
-                <input type="text" id="subjectMaterials" placeholder="e.g., study-guide.pdf, video-tutorial.mp4">
-                <small>Separate multiple materials with commas</small>
-            </div>
-            
-            <button type="submit" class="btn-primary">Add Subject</button>
-        </form>
-    `;
-}
-
-// FORM HANDLING
-function setupFormHandling() {
-    document.addEventListener('submit', function(e) {
-        if (e.target.id === 'subjectForm') {
-            e.preventDefault();
-            handleAddSubject();
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    });
+
+        const data = await response.json();
+        console.log('Employees data:', data);
+
+        const employeesList = document.getElementById('employeesList');
+        if (!employeesList) {
+            console.error('employeesList element not found');
+            return;
+        }
+
+        if (data.employees && data.employees.length > 0) {
+            employeesList.innerHTML = data.employees.map(employee => `
+                <div class="employee-card" data-employee-id="${employee.id}">
+                    <div class="employee-info">
+                        <h4>${employee.name}</h4>
+                        <p>📧 ${employee.email}</p>
+                        <p>🎯 ${employee.specialization || 'General'}</p>
+                        <div class="employee-status">
+                            <span class="status-badge status-${employee.status.toLowerCase()}">
+                                ${employee.status}
+                            </span>
+                        </div>
+                        <p class="employee-meta">
+                            Invited: ${new Date(employee.date_invited).toLocaleDateString()}
+                            ${employee.status === 'PENDING' ? 
+                                `<button onclick="resendInvitation('${employee.id}')" class="btn-resend">
+                                    🔄 Resend
+                                </button>` : ''
+                            }
+                        </p>
+                    </div>
+                    <div class="employee-actions">
+                        <button onclick="removeEmployee('${employee.id}')" class="btn-remove">
+                            ❌ Remove
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            employeesList.innerHTML = '<p>No employees found. Add some employees to get started!</p>';
+        }
+    } catch (error) {
+        console.error('Error loading employees:', error);
+        const employeesList = document.getElementById('employeesList');
+        if (employeesList) {
+            employeesList.innerHTML = `
+                <div class="error-message">
+                    <p>❌ Failed to load employees</p>
+                    <p>Error: ${error.message}</p>
+                    <button onclick="testAPIConnection()" class="btn btn-secondary">🔍 Test API</button>
+                </div>
+            `;
+        }
+    }
 }
 
-function handleAddSubject() {
-    // Get form values
-    const title = document.getElementById('subjectTitle').value.trim();
-    const track = document.getElementById('subjectTrack').value;
-    const duration = document.getElementById('subjectDuration').value.trim();
-    const assessment = document.getElementById('subjectAssessment').value.trim();
-    const description = document.getElementById('subjectDescription').value.trim();
-    const materialsText = document.getElementById('subjectMaterials').value.trim();
+// Fixed: Add employee function
+async function addEmployee() {
+    console.log('Adding employee...');
+    
+    // Get form data
+    const name = document.getElementById('employeeName')?.value?.trim();
+    const email = document.getElementById('employeeEmail')?.value?.trim();
+    const specialization = document.getElementById('employeeSpecialization')?.value?.trim();
+
+    console.log('Form data:', { name, email, specialization });
 
     // Validation
-    if (!title || !track || !duration || !assessment || !description) {
-        alert('Please fill in all required fields');
+    if (!name || !email) {
+        alert('Please fill in name and email fields');
         return;
     }
 
-    // Process materials
-    const materials = materialsText ? materialsText.split(',').map(m => m.trim()).filter(m => m) : [];
-
-    // Create new subject
-    const newSubject = {
-        id: title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
-        title: title,
-        track: track,
-        duration: duration,
-        assessment: assessment,
-        description: description,
-        materials: materials
-    };
-
-    // Add to curriculum
-    addSubjectToCurriculum(newSubject);
-
-    // Reset form
-    document.getElementById('subjectForm').reset();
-
-    // Refresh subjects list
-    renderSubjectsList();
-
-    // Success message
-    alert(`✅ Subject "${title}" added successfully!`);
-}
-
-// CURRICULUM MANAGEMENT
-function getCurriculum() {
-    const stored = localStorage.getItem('pmerit_admin_curriculum');
-    if (stored) {
-        return JSON.parse(stored);
-    }
-    
-    // Return default curriculum if none stored
-    if (window.AVAILABLE_SUBJECTS) {
-        return [...window.AVAILABLE_SUBJECTS];
-    }
-    
-    return [];
-}
-
-function saveCurriculum(subjects) {
-    localStorage.setItem('pmerit_admin_curriculum', JSON.stringify(subjects));
-    
-    // Also update global AVAILABLE_SUBJECTS if it exists
-    if (window.AVAILABLE_SUBJECTS) {
-        window.AVAILABLE_SUBJECTS.length = 0;
-        window.AVAILABLE_SUBJECTS.push(...subjects);
-    }
-}
-
-function addSubjectToCurriculum(newSubject) {
-    const curriculum = getCurriculum();
-    curriculum.push(newSubject);
-    saveCurriculum(curriculum);
-}
-
-function deleteSubjectFromCurriculum(index) {
-    const curriculum = getCurriculum();
-    if (confirm(`Are you sure you want to delete "${curriculum[index].title}"?`)) {
-        curriculum.splice(index, 1);
-        saveCurriculum(curriculum);
-        renderSubjectsList();
-    }
-}
-
-// SUBJECTS LIST RENDERING
-function renderSubjectsList() {
-    const container = document.querySelector('.subjects-grid');
-    if (!container) return;
-
-    const curriculum = getCurriculum();
-    
-    if (curriculum.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <h3>📚 No subjects yet</h3>
-                <p>Add your first subject using the form above</p>
-            </div>
-        `;
+    if (!email.includes('@')) {
+        alert('Please enter a valid email address');
         return;
     }
 
-    container.innerHTML = curriculum.map((subject, index) => `
-        <div class="admin-subject-card" data-track="${subject.track}">
-            <div class="subject-header">
-                <span class="track-badge track-${subject.track}">${getTrackLabel(subject.track)}</span>
-                <h4>${subject.title}</h4>
-            </div>
-            <div class="subject-details">
-                <p><strong>Duration:</strong> ${subject.duration}</p>
-                <p><strong>Assessment:</strong> ${subject.assessment}</p>
-                <p><strong>Description:</strong> ${subject.description}</p>
-                ${subject.materials.length > 0 ? `<p><strong>Materials:</strong> ${subject.materials.join(', ')}</p>` : ''}
-            </div>
-            <div class="subject-actions">
-                <button class="btn-edit" onclick="editSubject(${index})">✏️ Edit</button>
-                <button class="btn-delete" onclick="deleteSubject(${index})">🗑️ Delete</button>
-            </div>
+    try {
+        const employeeData = {
+            name: name,
+            email: email,
+            specialization: specialization || 'General'
+        };
+
+        console.log('Sending employee data:', employeeData);
+
+        const response = await fetch(API_BASE + '/employees', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(employeeData)
+        });
+
+        console.log('Add employee response status:', response.status);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Add employee result:', result);
+
+        // Show success notification
+        showNotification(`Employee ${result.employee.name} added successfully with PENDING status. Invitation sent to ${result.employee.email} for Tier 2 access.`);
+
+        // Clear form
+        document.getElementById('employeeName').value = '';
+        document.getElementById('employeeEmail').value = '';
+        document.getElementById('employeeSpecialization').value = '';
+
+        // Close modal
+        closeAddEmployeeModal();
+
+        // Reload employees list
+        await loadEmployees();
+
+    } catch (error) {
+        console.error('Error adding employee:', error);
+        showNotification(`Failed to add employee: ${error.message}`, 'error');
+    }
+}
+
+// Fixed: Remove employee function
+async function removeEmployee(employeeId) {
+    console.log('Removing employee:', employeeId);
+
+    if (!confirm('Are you sure you want to remove this employee? This action cannot be undone.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(API_BASE + `/employees/${employeeId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+
+        console.log('Remove employee response status:', response.status);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Remove employee result:', result);
+
+        showNotification(result.message || 'Employee removed successfully');
+        
+        // Reload employees list
+        await loadEmployees();
+
+    } catch (error) {
+        console.error('Error removing employee:', error);
+        showNotification(`Failed to remove employee: ${error.message}`, 'error');
+    }
+}
+
+// Test API connection function
+async function testAPIConnection() {
+    console.log('Testing API connection...');
+    
+    try {
+        // Test health endpoint
+        const healthResponse = await fetch(API_BASE + '/health');
+        const healthData = await healthResponse.json();
+        console.log('Health check:', healthData);
+
+        // Test KV endpoint
+        const kvResponse = await fetch(API_BASE + '/test-kv');
+        const kvData = await kvResponse.json();
+        console.log('KV test:', kvData);
+
+        showNotification(`API Status: ${healthData.status} | KV Status: ${kvData.kv_status}`);
+
+    } catch (error) {
+        console.error('API connection test failed:', error);
+        showNotification(`API connection failed: ${error.message}`, 'error');
+    }
+}
+
+// Resend invitation function
+async function resendInvitation(employeeId) {
+    console.log('Resending invitation for employee:', employeeId);
+    showNotification('Invitation resent successfully!');
+}
+
+// Show notification function
+function showNotification(message, type = 'success') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(n => n.remove());
+
+    // Create notification
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <p>${message}</p>
+            <button onclick="this.parentElement.parentElement.remove()" class="notification-close">×</button>
         </div>
-    `).join('');
+    `;
+
+    document.body.appendChild(notification);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
 }
 
-// HELPER FUNCTIONS
-function getTrackLabel(track) {
-    const labels = {
-        'core': 'Core Curriculum',
-        'remote_careers': 'Remote Careers',
-        'electives': 'Electives',
-        'capstone': 'Capstone'
-    };
-    return labels[track] || track;
-}
-
-// EXPORT FUNCTIONALITY
-function setupExportButton() {
-    const subjectsPanel = document.getElementById('subjects-panel');
-    if (subjectsPanel) {
-        const exportButton = document.createElement('button');
-        exportButton.className = 'btn-export';
-        exportButton.innerHTML = '📥 Export Curriculum';
-        exportButton.onclick = exportCurriculum;
-        subjectsPanel.appendChild(exportButton);
+// Modal functions
+function showAddEmployeeModal() {
+    const modal = document.getElementById('addEmployeeModal');
+    if (modal) {
+        modal.style.display = 'flex';
     }
 }
 
-function exportCurriculum() {
-    const curriculum = getCurriculum();
-    const dataStr = JSON.stringify(curriculum, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(dataBlob);
-    link.download = 'pmerit_curriculum.json';
-    link.click();
-    
-    alert('✅ Curriculum exported successfully!');
-}
-
-// GLOBAL FUNCTIONS (for onclick handlers)
-window.editSubject = function(index) {
-    const curriculum = getCurriculum();
-    const subject = curriculum[index];
-    
-    // Populate form with subject data
-    document.getElementById('subjectTitle').value = subject.title;
-    document.getElementById('subjectTrack').value = subject.track;
-    document.getElementById('subjectDuration').value = subject.duration;
-    document.getElementById('subjectAssessment').value = subject.assessment;
-    document.getElementById('subjectDescription').value = subject.description;
-    document.getElementById('subjectMaterials').value = subject.materials.join(', ');
-    
-    // Change form to edit mode
-    const form = document.getElementById('subjectForm');
-    const submitBtn = form.querySelector('button[type="submit"]');
-    submitBtn.textContent = 'Update Subject';
-    submitBtn.onclick = function(e) {
-        e.preventDefault();
-        updateSubject(index);
-    };
-    
-    // Scroll to form
-    document.querySelector('.add-subject-form').scrollIntoView({behavior: 'smooth'});
-};
-
-window.deleteSubject = function(index) {
-    deleteSubjectFromCurriculum(index);
-};
-
-function updateSubject(index) {
-    // Get form values
-    const title = document.getElementById('subjectTitle').value.trim();
-    const track = document.getElementById('subjectTrack').value;
-    const duration = document.getElementById('subjectDuration').value.trim();
-    const assessment = document.getElementById('subjectAssessment').value.trim();
-    const description = document.getElementById('subjectDescription').value.trim();
-    const materialsText = document.getElementById('subjectMaterials').value.trim();
-
-    // Validation
-    if (!title || !track || !duration || !assessment || !description) {
-        alert('Please fill in all required fields');
-        return;
+function closeAddEmployeeModal() {
+    const modal = document.getElementById('addEmployeeModal');
+    if (modal) {
+        modal.style.display = 'none';
     }
-
-    // Process materials
-    const materials = materialsText ? materialsText.split(',').map(m => m.trim()).filter(m => m) : [];
-
-    // Update subject
-    const curriculum = getCurriculum();
-    curriculum[index] = {
-        id: title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
-        title: title,
-        track: track,
-        duration: duration,
-        assessment: assessment,
-        description: description,
-        materials: materials
-    };
-
-    saveCurriculum(curriculum);
-
-    // Reset form
-    document.getElementById('subjectForm').reset();
-    const submitBtn = document.querySelector('button[type="submit"]');
-    submitBtn.textContent = 'Add Subject';
-    submitBtn.onclick = null;
-
-    // Refresh list
-    renderSubjectsList();
-
-    alert(`✅ Subject "${title}" updated successfully!`);
 }
 
-console.log('🛠️ Complete Admin Panel System - Ready!');
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded, initializing...');
+    
+    // Test API connection on load
+    testAPIConnection();
+    
+    // Load employees if we're in admin mode
+    if (window.isAdminMode) {
+        loadEmployees();
+    }
+});
+
+// Auto-load employees when switching to admin mode
+function onAdminModeActivated() {
+    console.log('Admin mode activated, loading employees...');
+    loadEmployees();
+}
