@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PMERIT Employee Invitation Acceptance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Inter, Arial, sans-serif; background: #f8f9ff; color: #222; margin: 0; padding: 0; }
+    .container { max-width: 450px; margin: 80px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.09); padding: 36px 32px; text-align: center; }
+    .success { color: #155724; background: #d4edda; border-radius: 6px; padding: 16px; margin-bottom: 18px; }
+    .error { color: #721c24; background: #f8d7da; border-radius: 6px; padding: 16px; margin-bottom: 18px; }
+    .loading { color: #007bff; margin-bottom: 18px; }
+    h1 { margin-bottom: 8px; }
+    .btn { background: linear-gradient(135deg,#4facfe 0%,#00f2fe 100%); color: #fff; border: none; border-radius: 24px; padding: 12px 32px; font-weight: 600; cursor: pointer; margin-top: 18px; }
+    .btn:active { filter: brightness(0.9); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>👋 Welcome to PMERIT!</h1>
+    <div id="status" class="loading">Verifying your invitation...</div>
+    <div id="next-steps" style="display:none;">
+      <a class="btn" href="/employee/dashboard.html">Go to Employee Portal</a>
+    </div>
+  </div>
+  <script>
+    // --- CONFIG ---
+    const API_BASE = 'https://pmerit-employee-api.peoplemerit.workers.dev/api';
+
+    // --- HELPER: Get Query Param ---
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    async function acceptInvitation(employeeId) {
+      try {
+        const response = await fetch(`${API_BASE}/employees/${employeeId}/accept-invitation`, {
+          method: 'PUT'
+        });
+        return await response.json();
+      } catch (error) {
+        return { success: false, error: error.message || "Network error." };
+      }
+    }
+
+    async function main() {
+      const statusDiv = document.getElementById('status');
+      const nextSteps = document.getElementById('next-steps');
+      const employeeId = getQueryParam('id');
+
+      if (!employeeId) {
+        statusDiv.className = 'error';
+        statusDiv.textContent = "Invalid invitation link. Please contact your admin.";
+        return;
+      }
+
+      statusDiv.textContent = "Accepting your invitation...";
+      const result = await acceptInvitation(employeeId);
+
+      if (result.success) {
+        statusDiv.className = 'success';
+        statusDiv.innerHTML = "🎉 Your invitation has been accepted!<br>You now have access to the Employee Portal.";
+        nextSteps.style.display = "block";
+      } else if (result.error === "Employee not found") {
+        statusDiv.className = 'error';
+        statusDiv.textContent = "Invitation not found. Please check your link or contact support.";
+      } else if (result.error) {
+        statusDiv.className = 'error';
+        statusDiv.textContent = "Error: " + result.error;
+      } else {
+        statusDiv.className = 'error';
+        statusDiv.textContent = "An unknown error occurred.";
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>
