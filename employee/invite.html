@@ -11,26 +11,33 @@
     .error { color: #721c24; background: #f8d7da; border-radius: 6px; padding: 16px; margin-bottom: 18px; }
     .loading { color: #007bff; margin-bottom: 18px; }
     h1 { margin-bottom: 8px; }
-    .btn { background: linear-gradient(135deg,#4facfe 0%,#00f2fe 100%); color: #fff; border: none; border-radius: 24px; padding: 12px 32px; font-weight: 600; cursor: pointer; margin-top: 18px; }
-    .btn:active { filter: brightness(0.9); }
+    .btn { background: linear-gradient(135deg,#4facfe 0%,#00f2fe 100%); color: #fff; border: none; border-radius: 8px; padding: 14px 28px; font-size: 1rem; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 25px; transition: all 0.3s ease; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,242,254,0.3); }
+    .logo { margin-bottom: 25px; max-width: 150px; }
+    @media (max-width: 600px) {
+      .container { margin: 30px 15px; padding: 25px 20px; }
+      h1 { font-size: 1.8rem; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>👋 Welcome to PMERIT!</h1>
-    <div id="status" class="loading">Verifying your invitation...</div>
-    <div id="next-steps" style="display:none;">
-      <a class="btn" href="/employee/dashboard.html">Go to Employee Portal</a>
+    <img src="https://pmerit.com/images/pmerit-logo-dark.svg" alt="PMERIT AI Logo" class="logo">
+    <h1>Invitation Status</h1>
+    <div id="status" class="loading">Processing your invitation...</div>
+    <div id="next-steps" style="display: none;">
+      <p>Click below to access the Employee Portal:</p>
+      <a href="/employee-index.html" class="btn">Go to Portal</a>
     </div>
   </div>
-  <script>
-    // --- CONFIG ---
-    const API_BASE = 'https://pmerit-employee-api.peoplemerit.workers.dev/api';
 
-    // --- HELPER: Get Query Param ---
-    function getQueryParam(param) {
+  <script>
+    // !! IMPORTANT: Replace with your deployed Cloudflare Worker URL !!
+    const API_BASE = 'https://pmerit-employee-api.peoplemerit.workers.dev/api'; 
+
+    function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
+      return urlParams.get(name);
     }
 
     async function acceptInvitation(employeeId) {
@@ -65,16 +72,21 @@
       } else if (result.error === "Employee not found") {
         statusDiv.className = 'error';
         statusDiv.textContent = "Invitation not found. Please check your link or contact support.";
-      } else if (result.error) {
+      } else if (result.error === "Invitation already accepted.") { // Handle already accepted
+        statusDiv.className = 'success'; // Treat as success if already active
+        statusDiv.innerHTML = "✅ Your invitation has already been accepted.<br>You can now access the Employee Portal.";
+        nextSteps.style.display = "block";
+      }
+      else if (result.error) {
         statusDiv.className = 'error';
         statusDiv.textContent = "Error: " + result.error;
       } else {
         statusDiv.className = 'error';
-        statusDiv.textContent = "An unknown error occurred.";
+        statusDiv.textContent = "An unknown error occurred. Please try again.";
       }
     }
 
-    main();
+    document.addEventListener('DOMContentLoaded', main);
   </script>
 </body>
 </html>
