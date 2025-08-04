@@ -5,19 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎓 PMERIT - Empowering Learning Through Innovation</title>
     
-    <!-- Modular CSS Files -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/chat.css">
     <link rel="stylesheet" href="css/responsive.css">
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Admin Portal Styles -->
     <style>
         /* Admin Portal Integration Styles */
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f9fafb;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         .admin-mode {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -29,1020 +36,699 @@
             background: white;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            box-sizing: border-box;
+            flex-grow: 1;
         }
-        
-        .admin-header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .admin-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-        
-        .admin-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .admin-header-actions {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .admin-quick-link-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        
-        .admin-quick-link-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-            color: white;
-            text-decoration: none;
-        }
-        
-        .admin-logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        
-        .admin-logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .admin-tabs {
-            display: flex;
-            border-bottom: 2px solid #eee;
-            margin-bottom: 30px;
-            padding: 0 40px;
-        }
-        
-        .admin-tab {
-            padding: 15px 30px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-size: 1rem;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .admin-tab.active {
-            color: #4facfe;
-            border-bottom-color: #4facfe;
-        }
-        
-        .admin-tab-content {
-            display: none;
-            padding: 0 40px 40px 40px;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .admin-tab-content.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Employee Management Styles */
-        .employee-management {
-            background: #f8f9ff;
-            border-radius: 15px;
-            padding: 30px;
-        }
-        
-        .section-header {
+
+        .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            color: #333;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .add-employee-btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            margin-bottom: 2rem;
             color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: transform 0.2s ease;
         }
-        
-        .add-employee-btn:hover {
-            transform: translateY(-2px);
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
         }
-        
-        .refresh-btn {
-            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+        .dashboard-header .btn-primary {
+            background-color: #4CAF50;
             color: white;
+            padding: 10px 20px;
             border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: 600;
-            transition: transform 0.2s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
         }
-        
-        .refresh-btn:hover {
-            transform: translateY(-2px);
+        .dashboard-header .btn-primary:hover {
+            background-color: #45a049;
         }
-        
-        .employee-list {
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .metric-card {
+            background: #f0f4f8;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            align-items: flex-start;
         }
-        
-        .employee-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
+        .metric-card h3 {
+            font-size: 1.1rem;
+            color: #667eea;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .metric-card p {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        .employee-list-section {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        .list-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease;
-            border-left: 4px solid #4facfe;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
         }
-        
-        .employee-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-        
-        .employee-info h3 {
+        .list-header h2 {
+            font-size: 1.8rem;
             color: #333;
-            margin-bottom: 5px;
-            font-size: 1.2rem;
+            margin: 0;
         }
-        
-        .employee-info p {
-            color: #666;
+        .search-bar {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 250px;
+            font-size: 0.95rem;
+        }
+
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        .employee-table th, .employee-table td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .employee-table th {
+            background-color: #f8f9fc;
+            color: #555;
             font-size: 0.9rem;
-            margin-bottom: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
-        
-        .employee-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
+        .employee-table td {
+            color: #444;
+            font-size: 0.95rem;
         }
-        
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
+        .employee-table tbody tr:hover {
+            background-color: #f0f4f8;
+        }
+        .employee-table .status-badge {
+            padding: 6px 10px;
+            border-radius: 6px;
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
         }
-        
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-        
-        .status-active {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .resend-btn {
-            background: #4facfe;
-            color: white;
+        .status-active { background-color: #d4edda; color: #155724; }
+        .status-pending { background-color: #fff3cd; color: #856404; }
+        .status-inactive { background-color: #f8d7da; color: #721c24; }
+
+        .employee-actions button {
+            background: none;
             border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 10px;
+            color: #007bff;
+            transition: color 0.2s ease;
+        }
+        .employee-actions button:hover {
+            color: #0056b3;
+        }
+        .employee-actions .delete-btn {
+            color: #dc3545;
+        }
+        .employee-actions .delete-btn:hover {
+            color: #c82333;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+        .pagination button {
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            padding: 8px 12px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 0.9rem;
-            transition: all 0.2s ease;
+            color: #333;
         }
-        
-        .resend-btn:hover {
-            background: #369bfe;
-            transform: translateY(-1px);
-        }
-        
-        .remove-btn {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        .pagination button.active {
+            background-color: #667eea;
             color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
+            border-color: #667eea;
         }
-        
-        .remove-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 10px rgba(255,107,107,0.3);
+        .pagination button:hover:not(.active) {
+            background-color: #dee2e6;
         }
-        
-        .no-employees {
-            text-align: center;
-            color: #666;
-            font-style: italic;
-            padding: 40px;
-            background: white;
-            border-radius: 10px;
-            border: 2px dashed #ddd;
-        }
-        
-        .loading {
-            text-align: center;
-            color: #4facfe;
-            padding: 40px;
-        }
-        
-        /* Modal Styles */
+
+        /* Modals */
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
             left: 0;
             top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s ease;
-            backdrop-filter: blur(5px);
-            padding: 20px;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
             justify-content: center;
             align-items: center;
         }
-        
+
         .modal-content {
             background-color: #fefefe;
+            margin: auto;
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative;
+            border-radius: 12px;
+            width: 90%;
             max-width: 500px;
-            width: 100%;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
         }
-        
-        .form-group {
-            margin-bottom: 20px;
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
         }
-        
-        .form-group label {
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-form label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
             color: #555;
+            font-weight: 500;
         }
-        
-        .form-group input, .form-group select {
-            width: 100%;
+
+        .modal-form input[type="text"],
+        .modal-form input[type="email"],
+        .modal-form select {
+            width: calc(100% - 24px);
             padding: 12px;
-            border-radius: 8px;
+            margin-bottom: 15px;
             border: 1px solid #ddd;
+            border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            box-sizing: border-box;
         }
-        
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #4facfe;
-        }
-        
-        .form-actions {
+
+        .modal-buttons {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
             margin-top: 20px;
         }
-        
-        .btn-cancel {
-            background-color: #e0e0e0;
-            color: #333;
+
+        .modal-buttons button {
+            padding: 12px 25px;
             border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.2s ease;
-        }
-        
-        .btn-cancel:hover {
-            background-color: #d5d5d5;
-        }
-        
-        .btn-submit {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: transform 0.2s ease;
-        }
-        
-        .btn-submit:hover {
-            transform: translateY(-2px);
-        }
-        
-        .confirmation-modal h3 {
-            color: #ff6b6b;
-        }
-        
-        .confirmation-modal p {
-            margin-top: 10px;
-        }
-        
-        /* Mode Toggle */
-        .mode-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1001;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(79,172,254,0.3);
-        }
-        
-        .mode-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79,172,254,0.4);
-        }
-        <script src="js/admin.js"></script>
-        /* Hide student interface when in admin mode */
-        .admin-mode .app-container {
-            display: none;
-        }
-        
-        /* Show admin interface only in admin mode */
-        .admin-interface {
-            display: none;
-        }
-        
-        .admin-mode .admin-interface {
-            display: block;
-        }
-        
-        /* Mission and stats styles for admin */
-        .mission-box {
-            background: #f8f9ff;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 12px rgba(79,172,254,0.07);
-        }
-        
-        .mission-box h2 {
-            color: #4facfe;
-            font-size: 1.5rem;
-            margin-bottom: 12px;
-        }
-        
-        .mission-box p {
-            color: #333;
-            font-size: 1.1rem;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
-            gap: 14px;
-            margin-top: 10px;
-        }
-        
-        .stat {
-            background: white;
-            border-radius: 12px;
-            padding: 18px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(79,172,254,0.07);
-        }
-        
-        .stat h3 {
-            font-size: 1.9rem;
-            font-weight: bold;
-            color: #4facfe;
-            margin-bottom: 7px;
-        }
-        
-        .stat p {
-            color: #666;
             font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-buttons .btn-cancel {
+            background-color: #e9ecef;
+            color: #555;
+        }
+
+        .modal-buttons .btn-cancel:hover {
+            background-color: #dee2e6;
+        }
+
+        .modal-buttons .btn-confirm {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .modal-buttons .btn-confirm:hover {
+            background-color: #5a6cdb;
+        }
+
+        /* Custom Alert */
+        .custom-alert {
+            display: none; /* Hidden by default */
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50; /* Success green */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1001;
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .custom-alert.show {
+            opacity: 1;
+        }
+
+        .custom-alert.error {
+            background-color: #f44336; /* Error red */
+        }
+        
+        /* Keyframe animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 1rem;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            .employee-table thead {
+                display: none; /* Hide table headers on small screens */
+            }
+            .employee-table, .employee-table tbody, .employee-table tr, .employee-table td {
+                display: block;
+                width: 100%;
+            }
+            .employee-table tr {
+                margin-bottom: 15px;
+                border: 1px solid #eee;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            }
+            .employee-table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+            .employee-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: calc(50% - 20px);
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: 600;
+                color: #777;
+            }
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
         }
     </style>
-    
-    <script>
-    // EMERGENCY LOGIN & MODE SWITCHING
-    window.emergencyLogin = function() {
-        localStorage.setItem('pmerit_session', JSON.stringify({
-            loggedIn: true, 
-            email: 'demo@pmerit.com', 
-            name: 'Demo User', 
-            time: Date.now()
-        }));
-        window.location.href = 'dashboard.html';
-    };
-    
-    // Mode switching functionality
-    let isAdminMode = false;
-    
-    function toggleMode() {
-        isAdminMode = !isAdminMode;
-        const body = document.body;
-        const toggleBtn = document.querySelector('.mode-toggle');
-        
-        if (isAdminMode) {
-            body.classList.add('admin-mode');
-            toggleBtn.textContent = '🎓 Switch to Student Mode';
-            // Load employees when entering admin mode
-            if (typeof loadEmployees === 'function') {
-                loadEmployees();
-            }
-        } else {
-            body.classList.remove('admin-mode');
-            toggleBtn.textContent = '🛡️ Switch to Admin Mode';
-        }
-    }
-    
-    // Permanent Cloudflare Worker API
-    const API_BASE = 'https://pmerit-employee-api.peoplemerit.workers.dev/api';
-    </script>
 </head>
-<body>
-    <!-- Mode Toggle Button -->
-    <button class="mode-toggle" onclick="toggleMode()">🛡️ Switch to Admin Mode</button>
-    
-    <!-- STUDENT INTERFACE (DEFAULT) -->
-    <div class="app-container">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo">🎓 PMERIT</div>
-                
-                <div class="header-center">
-                    <h1>Empowering Learning Through Innovation</h1>
-                    <p>Accessible, high-quality education for global opportunities</p>
-                </div>
-                
-                <nav class="nav-actions">
-                    <select class="language-selector">
-                        <option value="en">🌍 English</option>
-                        <option value="yo">Yoruba</option>
-                        <option value="ig">Igbo</option>
-                        <option value="ha">Hausa</option>
-                    </select>
-                    <a href="courses.html" class="btn btn-pricing">💰 Pricing</a>
-                    <a href="signin.html" class="btn btn-signin">Sign In</a>
-                    <a href="#" id="startLearningBtn" class="btn btn-primary">Start Learning</a>
-                </nav>
+<body class="admin-mode">
+    <div class="admin-container">
+        <div class="dashboard-header">
+            <h1>Employee Management Dashboard</h1>
+            <button class="btn-primary" onclick="showAddEmployeeModal()">Add New Employee</button>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Total Employees</h3>
+                <p id="totalEmployees">0</p>
             </div>
-        </header>
-
-        <main class="main-content">
-            <aside class="sidebar-left" id="leftSidebar">
-                <div class="sidebar-header">
-                    <div class="avatar-container">
-                        <div class="avatar-circle">
-                            <span class="avatar-icon">🤖</span>
-                        </div>
-                        <div class="avatar-info">
-                            <h3>Gabriel AI</h3>
-                            <p>Your Learning Guide</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quick-actions">
-                    <div class="action-item" data-action="text-to-speech">
-                        <span class="icon">🎧</span>
-                        <span class="label">Text-to-Speech</span>
-                    </div>
-                    <div class="action-item" data-action="dark-mode">
-                        <span class="icon">🌙</span>
-                        <span class="label">Dark Mode</span>
-                    </div>
-                    <div class="action-item" data-action="my-profile">
-                        <span class="icon">👤</span>
-                        <span class="label">My Profile</span>
-                    </div>
-                    <div class="action-item" data-action="settings">
-                        <span class="icon">⚙️</span>
-                        <span class="label">Settings</span>
-                    </div>
-                    <div class="action-item" data-action="assessments">
-                        <span class="icon">📋</span>
-                        <span class="label">Assessments</span>
-                    </div>
-                    <div class="action-item" data-action="subjects">
-                        <span class="icon">📚</span>
-                        <span class="label">Subjects</span>
-                    </div>
-                    <div class="action-item" data-action="progress">
-                        <span class="icon">📊</span>
-                        <span class="label">Progress</span>
-                    </div>
-                    <div class="action-item" data-action="help">
-                        <span class="icon">❓</span>
-                        <span class="label">Help</span>
-                    </div>
-                </div>
-            </aside>
-
-            <section class="chat-container">
-                <div class="chat-header">
-                    <h1>Empowering Learning Through Innovation</h1>
-                    <p>Accessible, high-quality education for global opportunities</p>
-                </div>
-
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message ai-message">
-                        <div class="message-content">
-                            <strong>Gabriel AI:</strong> Welcome to PMERIT! I'm here to guide your learning journey. Our mission is to provide accessible, high-quality education that opens doors to endless opportunities. How can I help you discover your potential today?
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chat-input-container">
-                    <div class="chat-input-wrapper">
-                        <input type="text" id="chatInput" placeholder="Ask about courses, learning paths, or your goals..." maxlength="1000">
-                        <button id="sendButton" class="send-button">
-                            <span class="send-icon">→</span>
-                        </button>
-                    </div>
-                    
-                    <div class="chat-footer">
-                        <div class="footer-left">
-                            <span class="char-count">0/1000</span>
-                        </div>
-                        <div class="footer-center">
-                            <span class="status-item">🎭 Virtual Human Mode</span>
-                            <span class="status-item">📖 Read About</span>
-                        </div>
-                        <div class="footer-right">
-                            <span class="status-connected">✅ Connected to Educational Services</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <aside class="sidebar-right" id="rightSidebar">
-                <div class="discovery-section">
-                    <div class="section-header">
-                        <span class="section-icon">🧠</span>
-                        <h3>Discover Your Path</h3>
-                    </div>
-                    <p>Personalized assessments to guide your learning journey</p>
-                </div>
-
-                <div class="assessment-cards">
-                    <div class="assessment-card" data-assessment="learning-style">
-                        <div class="card-header">
-                            <span class="card-icon">🎯</span>
-                            <h4>Learning Style Assessment</h4>
-                        </div>
-                        <p>Discover how you learn best and personalize your experience</p>
-                        <button class="assessment-btn">Start Assessment →</button>
-                    </div>
-
-                    <div class="assessment-card" data-assessment="interest-profiler">
-                        <div class="card-header">
-                            <span class="card-icon">💡</span>
-                            <h4>Interest Profiler</h4>
-                        </div>
-                        <p>Explore subjects and fields that match your natural interests</p>
-                        <button class="assessment-btn">Discover Interests →</button>
-                    </div>
-
-                    <div class="assessment-card" data-assessment="skills-assessment">
-                        <div class="card-header">
-                            <span class="card-icon">⚡</span>
-                            <h4>Skills Assessment</h4>
-                        </div>
-                        <p>Assess your current abilities and identify growth opportunities</p>
-                        <button class="assessment-btn">Evaluate Skills →</button>
-                    </div>
-                </div>
-            </aside>
-        </main>
-    </div>
-
-    <!-- ADMIN INTERFACE (HIDDEN BY DEFAULT) -->
-    <div class="admin-interface">
-        <div class="admin-container">
-            <div class="admin-header">
-                <div class="admin-header-actions">
-                    <a href="https://pmerit-ai-platform-portal.pages.dev/employee/" class="admin-quick-link-btn" target="_blank">👥 Employee Portal/Tier 2</a>
-                    <a href="https://pmerit-ai-platform.pages.dev" class="admin-quick-link-btn" target="_blank">🌐 Service Platform</a>
-                    <button class="admin-logout-btn" onclick="adminLogout()" aria-label="Logout">🚪 Logout</button>
-                </div>
-                <h1>🎓 PMERIT AI</h1>
-                <p>Tier 1 - Super Admin Portal</p>
+            <div class="metric-card">
+                <h3>Active Employees</h3>
+                <p id="activeEmployees">0</p>
             </div>
-            
-            <div class="admin-tabs">
-                <button class="admin-tab active" onclick="showAdminTab('admin-home', this)" aria-label="Home Tab">🏠 Home</button>
-                <button class="admin-tab" onclick="showAdminTab('admin-employees', this)" aria-label="Employee Management Tab">👥 Employee Management</button>
-                <button class="admin-tab" onclick="showAdminTab('admin-platform', this)" aria-label="Platform Status Tab">🌐 Platform Status</button>
+            <div class="metric-card">
+                <h3>Pending Invitations</h3>
+                <p id="pendingInvitations">0</p>
             </div>
+        </div>
 
-            <!-- ADMIN HOME TAB -->
-            <div id="admin-home" class="admin-tab-content active">
-                <div class="mission-box">
-                    <h2>Mission</h2>
-                    <p>
-                        Breaking poverty cycles through accessible education and career opportunities for underserved communities worldwide, with a dual market focus: Nigerian students and US underserved populations as primary targets.
-                    </p>
-                </div>
-                
-                <div class="stats">
-                    <div class="stat">
-                        <h3>3+ Billion</h3>
-                        <p>Target Users Globally</p>
-                    </div>
-                    <div class="stat">
-                        <h3>13</h3>
-                        <p>Microservices Running</p>
-                    </div>
-                    <div class="stat">
-                        <h3>100%</h3>
-                        <p>Platform Uptime</p>
-                    </div>
-                    <div class="stat">
-                        <h3>Ready</h3>
-                        <p>Content Integration</p>
-                    </div>
-                </div>
+        <div class="employee-list-section">
+            <div class="list-header">
+                <h2>All Employees</h2>
+                <input type="text" class="search-bar" id="employeeSearch" placeholder="Search employees...">
             </div>
-
-            <!-- ADMIN EMPLOYEE MANAGEMENT TAB -->
-            <div id="admin-employees" class="admin-tab-content">
-                <div class="employee-management">
-                    <div class="section-header">
-                        <h3 class="section-title">Tier 2 Employee Management</h3>
-                        <div class="action-buttons">
-                            <button class="add-employee-btn" onclick="showAddEmployeeModal()" aria-label="Add New Employee">
-                                + Add Employee
-                            </button>
-                            <button class="refresh-btn" onclick="loadEmployees()" aria-label="Refresh Employee List">
-                                🔄 Refresh
-                            </button>
-                        </div>
-                    </div>
-                    <div id="employee-list" class="employee-list">
-                        <div class="no-employees">
-                            <p>No employees found. Click "+ Add Employee" to get started.</p>
-                        </div>
-                    </div>
+            <table class="employee-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                    </tbody>
+            </table>
+            <div class="pagination" id="paginationControls">
                 </div>
-            </div>
-
-            <!-- ADMIN PLATFORM STATUS TAB -->
-            <div id="admin-platform" class="admin-tab-content">
-                <div class="platform-links">
-                    <div class="platform-link-card">
-                        <h3>Employee Management API</h3>
-                        <p>Permanent Cloudflare Worker API for employee operations.</p>
-                        <a href="https://pmerit-employee-api.peoplemerit.workers.dev/api/health" target="_blank" class="btn btn-primary" aria-label="View API Health">
-                            View API Health
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- ADMIN MODALS -->
-    <!-- Add Employee Modal -->
     <div id="addEmployeeModal" class="modal">
         <div class="modal-content">
-            <h3>+ Add New Tier 2 Employee</h3>
-            <form id="addEmployeeForm">
-                <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" name="fullName" placeholder="e.g., Jane Doe" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="e.g., jane.doe@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="department">Department</label>
-                    <select id="department" name="department" required>
-                        <option value="">Select Department</option>
-                        <option value="Research & Development">Research & Development</option>
-                        <option value="Operations">Operations</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Education">Education</option>
-                        <option value="Marketing">Marketing</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <input type="text" id="role" name="role" placeholder="e.g., Manager, Coordinator, Specialist" required>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn-cancel" onclick="closeAddEmployeeModal()" aria-label="Cancel Adding Employee">Cancel</button>
-                    <button type="submit" class="btn-submit" aria-label="Add Employee & Send Invitation">Add Employee & Send Invitation</button>
+            <span class="close-button" onclick="closeAddEmployeeModal()">&times;</span>
+            <h2>Add New Employee</h2>
+            <form id="addEmployeeForm" class="modal-form">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="department">Department:</label>
+                <select id="department" name="department" required>
+                    <option value="">Select Department</option>
+                    <option value="Research & Development">Research & Development</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Education">Education</option>
+                    <option value="Operations">Operations</option>
+                    <option value="Sales & Marketing">Sales & Marketing</option>
+                </select>
+
+                <label for="role">Role:</label>
+                <input type="text" id="role" name="role" required>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeAddEmployeeModal()">Cancel</button>
+                    <button type="submit" class="btn-confirm">Add Employee</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Remove Employee Confirmation Modal -->
-    <div id="removeEmployeeModal" class="modal confirmation-modal">
+    <div id="removeEmployeeModal" class="modal">
         <div class="modal-content">
-            <h3>⚠️ Remove Employee</h3>
-            <p>Are you sure you want to remove <strong id="removeEmployeeName"></strong>?</p>
-            <p>This action cannot be undone and will revoke their access to the Tier 2 portal.</p>
-            <div class="form-actions">
-                <button class="btn-cancel" onclick="closeRemoveEmployeeModal()" aria-label="Cancel Removing Employee">Cancel</button>
-                <button class="remove-btn" onclick="confirmRemoveEmployee()" aria-label="Confirm Remove Employee">🗑️ Remove Employee</button>
+            <span class="close-button" onclick="closeRemoveEmployeeModal()">&times;</span>
+            <h2>Confirm Removal</h2>
+            <p>Are you sure you want to remove <strong id="employeeToRemoveName"></strong> from the system? This action cannot be undone and will revoke their Tier 2 access.</p>
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancel" onclick="closeRemoveEmployeeModal()">Cancel</button>
+                <button type="button" class="btn-confirm delete-btn" onclick="handleRemoveEmployee()">Remove</button>
             </div>
         </div>
     </div>
 
-    <!-- Modular JavaScript Files for Student Interface -->
-    <script src="js/main.js"></script>
-    <script src="js/chat.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/components.js"></script>
-    <script src="js/pmerit-diagnostic-bot.js"></script>
+    <div id="customAlert" class="custom-alert"></div>
 
     <script>
-        // ADMIN FUNCTIONALITY INTEGRATION
-        document.addEventListener('DOMContentLoaded', () => {
-            // Attach form listener for add employee
-            const addEmployeeForm = document.getElementById('addEmployeeForm');
-            if (addEmployeeForm) {
-                addEmployeeForm.addEventListener('submit', handleAddEmployee);
-            }
-        });
+        // !! IMPORTANT: Replace with your deployed Cloudflare Worker URL !!
+        const API_BASE = 'https://pmerit-employee-api.peoplemerit.workers.dev/api'; 
+        const EMPLOYEES_PER_PAGE = 10;
+        let currentPage = 1;
+        let allEmployees = []; // Store all employees fetched from API
+        let filteredEmployees = []; // Store employees after search/filter
 
-        // Function to handle API calls with exponential backoff
+        // Utility for robust fetching with retries
         async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
             for (let i = 0; i < retries; i++) {
                 try {
                     const response = await fetch(url, options);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                    if (response.status === 429 && i < retries - 1) { // Too Many Requests
+                        console.warn(`Rate limit hit, retrying in ${delay}ms...`);
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2; // Exponential backoff
+                        continue;
                     }
                     return response;
                 } catch (error) {
                     if (i < retries - 1) {
+                        console.error(`Fetch failed, retrying in ${delay}ms:`, error);
                         await new Promise(res => setTimeout(res, delay));
-                        delay *= 2; // Exponential backoff
+                        delay *= 2;
                     } else {
-                        console.error('API call failed after multiple retries:', error);
                         throw error;
                     }
                 }
             }
+            throw new Error('Fetch failed after multiple retries.');
         }
 
-        // Admin Tab Switching
-        function showAdminTab(tabName, tabElement) {
-            // Hide all admin tab contents
-            const tabContents = document.querySelectorAll('.admin-tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
+        // Custom Alert Function
+        let alertTimeout;
+        function showCustomAlert(message, isError = false) {
+            const alertBox = document.getElementById('customAlert');
+            clearTimeout(alertTimeout); // Clear any existing timeout
 
-            // Deactivate all admin tabs
-            const tabs = document.querySelectorAll('.admin-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-
-            // Show the selected tab content and activate the clicked tab
-            const targetTab = document.getElementById(tabName);
-            if (targetTab) {
-                targetTab.classList.add('active');
-            }
-            if (tabElement) {
-                tabElement.classList.add('active');
+            alertBox.textContent = message;
+            alertBox.className = 'custom-alert show'; // Reset classes
+            if (isError) {
+                alertBox.classList.add('error');
             }
 
-            // Load employees only when the employee tab is opened
-            if (tabName === 'admin-employees') {
-                loadEmployees();
-            }
-        }
-        
-        // Custom alert function for admin
-        function showCustomAlert(message) {
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.style.display = 'flex';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3>Notification</h3>
-                    <p>${message}</p>
-                    <div class="form-actions">
-                        <button class="btn-cancel" onclick="this.closest('.modal').remove()">OK</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
+            alertTimeout = setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000); // Alert disappears after 5 seconds
         }
 
-        function adminLogout() {
-            showCustomAlert('Admin logged out! Switching to student mode...');
-            setTimeout(() => {
-                toggleMode(); // Switch back to student mode
-            }, 1500);
-        }
-        
-        // Function to load employee data
-        async function loadEmployees() {
-            const employeeList = document.getElementById('employee-list');
-            if (!employeeList) return;
-            
-            employeeList.innerHTML = '<div class="loading">Loading employees...</div>';
-            try {
-                const response = await fetchWithRetry(`${API_BASE}/employees`);
-                const data = await response.json();
-		const employees = data.employees || [];
-                renderEmployees(employees);
-            } catch (error) {
-                console.error('Error loading employees:', error);
-                employeeList.innerHTML = '<div class="no-employees"><p>Failed to load employees. Please try again.</p></div>';
-            }
-        }
-
-        // Function to render employee cards with PENDING/ACTIVE status
-        function renderEmployees(employees) {
-            const employeeList = document.getElementById('employee-list');
-            if (!employeeList) return;
-            
-            employeeList.innerHTML = '';
-            if (employees.length === 0) {
-                employeeList.innerHTML = '<div class="no-employees"><p>No employees found. Click "+ Add Employee" to get started.</p></div>';
-                return;
-            }
-            
-            employees.forEach(employee => {
-                const statusClass = employee.status === 'active' ? 'status-active' : 'status-pending';
-                const employeeCard = document.createElement('div');
-                employeeCard.className = 'employee-card';
-                employeeCard.innerHTML = `
-                    <div class="employee-info">
-                        <h3>${employee.fullName}</h3>
-                        <p><strong>Email:</strong> ${employee.email}</p>
-                        <p><strong>Department:</strong> ${employee.department}</p>
-                        <p><strong>Role:</strong> ${employee.role}</p>
-                        <p><strong>Specialization:</strong> ${employee.specialization || 'General'}</p>
-                    </div>
-                    <div class="employee-actions">
-                        <span class="status-badge ${statusClass}">${employee.status}</span>
-                        ${employee.status === 'pending' ? `<button class="resend-btn" onclick="resendInvitation('${employee.id}')" aria-label="Resend Invitation for ${employee.fullName}">Resend</button>` : ''}
-                        <button class="remove-btn" onclick="showRemoveEmployeeModal('${employee.id}', '${employee.fullName}')" aria-label="Remove Employee ${employee.fullName}">🗑️ Remove</button>
-                    </div>
-                `;
-                employeeList.appendChild(employeeCard);
-            });
-        }
-
-        // Modal functions
+        // Modal Functions
         function showAddEmployeeModal() {
-            const modal = document.getElementById('addEmployeeModal');
-            if (modal) {
-                modal.style.display = 'flex';
-            }
+            document.getElementById('addEmployeeModal').style.display = 'flex';
         }
 
         function closeAddEmployeeModal() {
-            const modal = document.getElementById('addEmployeeModal');
-            if (modal) {
-                modal.style.display = 'none';
-            }
+            document.getElementById('addEmployeeModal').style.display = 'none';
+            document.getElementById('addEmployeeForm').reset(); // Clear form on close
         }
 
         function showRemoveEmployeeModal(employeeId, employeeName) {
             const modal = document.getElementById('removeEmployeeModal');
-            const nameElement = document.getElementById('removeEmployeeName');
-            if (modal && nameElement) {
-                nameElement.textContent = employeeName;
-                modal.dataset.employeeId = employeeId;
-                modal.style.display = 'flex';
-            }
+            modal.dataset.employeeId = employeeId;
+            document.getElementById('employeeToRemoveName').textContent = employeeName;
+            modal.style.display = 'flex';
         }
 
         function closeRemoveEmployeeModal() {
-            const modal = document.getElementById('removeEmployeeModal');
-            if (modal) {
-                modal.style.display = 'none';
+            document.getElementById('removeEmployeeModal').style.display = 'none';
+            document.getElementById('removeEmployeeModal').dataset.employeeId = '';
+        }
+
+        // Fetch and Load Employees
+        async function loadEmployees() {
+            try {
+                const response = await fetchWithRetry(`${API_BASE}/employees`, { method: 'GET' });
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || errorData.error || 'Failed to fetch employees.');
+                }
+                const data = await response.json();
+                allEmployees = data.employees || [];
+                applySearchAndPagination(); // Apply initial search/pagination
+                updateMetrics();
+            } catch (error) {
+                console.error('Error loading employees:', error);
+                showCustomAlert('Failed to load employee data. Please try again.', true); // Show error alert
             }
         }
 
-        // Resend invitation functionality (for PENDING employees)
-        function resendInvitation(employeeId) {
-            showCustomAlert(`Invitation resent to employee ID: ${employeeId}. They will receive a new email with Tier 2 access instructions.`);
-            // Here you would typically make an API call to resend the invitation
-            // For now, we'll just show a confirmation message
+        // Update Dashboard Metrics
+        function updateMetrics() {
+            document.getElementById('totalEmployees').textContent = allEmployees.length;
+            document.getElementById('activeEmployees').textContent = allEmployees.filter(emp => emp.status === 'ACTIVE').length;
+            document.getElementById('pendingInvitations').textContent = allEmployees.filter(emp => emp.status === 'PENDING').length;
         }
 
-        // Function to add a new employee (creates as PENDING status)
+        // Render Employee Table
+        function renderEmployeeTable(employeesToDisplay) {
+            const tableBody = document.getElementById('employeeTableBody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            if (employeesToDisplay.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">No employees found.</td></tr>';
+                return;
+            }
+
+            employeesToDisplay.forEach(employee => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td data-label="ID">${employee.id}</td>
+                    <td data-label="Full Name">${employee.fullName || employee.name}</td>
+                    <td data-label="Email">${employee.email}</td>
+                    <td data-label="Department">${employee.department}</td>
+                    <td data-label="Role">${employee.role}</td>
+                    <td data-label="Status">
+                        <span class="status-badge status-${employee.status.toLowerCase()}">${employee.status}</span>
+                    </td>
+                    <td data-label="Actions" class="employee-actions">
+                        <button title="Delete Employee" class="delete-btn" onclick="showRemoveEmployeeModal('${employee.id}', '${employee.fullName || employee.name}')">🗑️</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Pagination and Search Logic
+        function applySearchAndPagination() {
+            const searchTerm = document.getElementById('employeeSearch').value.toLowerCase();
+            filteredEmployees = allEmployees.filter(employee =>
+                (employee.fullName && employee.fullName.toLowerCase().includes(searchTerm)) ||
+                (employee.name && employee.name.toLowerCase().includes(searchTerm)) || // Fallback for 'name'
+                (employee.email && employee.email.toLowerCase().includes(searchTerm)) ||
+                (employee.department && employee.department.toLowerCase().includes(searchTerm)) ||
+                (employee.role && employee.role.toLowerCase().includes(searchTerm))
+            );
+
+            const totalPages = Math.ceil(filteredEmployees.length / EMPLOYEES_PER_PAGE);
+            currentPage = Math.min(currentPage, totalPages > 0 ? totalPages : 1); // Adjust current page if filter reduces total pages
+
+            const startIndex = (currentPage - 1) * EMPLOYEES_PER_PAGE;
+            const endIndex = startIndex + EMPLOYEES_PER_PAGE;
+            const employeesToDisplay = filteredEmployees.slice(startIndex, endIndex);
+
+            renderEmployeeTable(employeesToDisplay);
+            renderPaginationControls(totalPages);
+        }
+
+        function renderPaginationControls(totalPages) {
+            const paginationControls = document.getElementById('paginationControls');
+            paginationControls.innerHTML = ''; // Clear existing buttons
+
+            if (totalPages <= 1) return;
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.classList.toggle('active', i === currentPage);
+                button.onclick = () => {
+                    currentPage = i;
+                    applySearchAndPagination();
+                };
+                paginationControls.appendChild(button);
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('addEmployeeForm').addEventListener('submit', handleAddEmployee);
+        document.getElementById('employeeSearch').addEventListener('input', () => {
+            currentPage = 1; // Reset to first page on new search
+            applySearchAndPagination();
+        });
+
+        // Add Employee Handler
         async function handleAddEmployee(event) {
             event.preventDefault();
             const form = event.target;
-            const newEmployee = {
-                fullName: form.fullName.value,
-                email: form.email.value,
-                department: form.department.value,
-                role: form.role.value
-            };
+            const fullName = form.fullName.value.trim();
+            const email = form.email.value.trim();
+            const department = form.department.value;
+            const role = form.role.value.trim();
+
+            if (!fullName || !email || !department || !role) {
+                showCustomAlert("Please fill in all required fields.", true); // Mark as error
+                return;
+            }
 
             try {
                 const response = await fetchWithRetry(`${API_BASE}/employees`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newEmployee)
+                    body: JSON.stringify({ fullName, email, department, role })
                 });
-                const addedEmployee = await response.json();
-                loadEmployees(); // Reload employees to see the new addition
-                closeAddEmployeeModal();
-                showCustomAlert(`Employee ${addedEmployee.fullName} added successfully with PENDING status. Invitation sent to ${addedEmployee.email} for Tier 2 access.`);
-                
-                // Clear the form
-                form.reset();
+
+                if (response.status === 409) { // Conflict (e.g., email already exists)
+                    const data = await response.json();
+                    showCustomAlert(data.error || "Employee with this email already exists.", true);
+                    return;
+                }
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || errorData.error || "Failed to add employee. Please try again.");
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    // Use data.employee for the notification details
+                    const employeeName = data.employee.fullName || data.employee.name || 'Unknown Employee';
+                    const employeeEmail = data.employee.email || 'unknown@example.com';
+                    showCustomAlert(`Employee ${employeeName} added successfully with PENDING status. Invitation sent to ${employeeEmail} for Tier 2 access.`);
+                    closeAddEmployeeModal();
+                    await loadEmployees(); // Reload all employees to update the table and metrics
+                } else {
+                    showCustomAlert(data.error || "Failed to add employee.", true);
+                }
             } catch (error) {
                 console.error('Error adding employee:', error);
-                showCustomAlert('Failed to add employee. Please try again.');
+                showCustomAlert('Failed to add employee. Please check your network or try again.', true);
+            } finally {
+                form.reset(); // Always clear the form after submission attempt
             }
         }
 
-        // Function to confirm and remove an employee
-        async function confirmRemoveEmployee() {
+        // Remove Employee Handler
+        async function handleRemoveEmployee() {
             const modal = document.getElementById('removeEmployeeModal');
-            if (!modal) return;
-            
             const employeeId = modal.dataset.employeeId;
+            if (!employeeId) return; // Should not happen if modal is properly opened
+
             try {
-                await fetchWithRetry(`${API_BASE}/employees/${employeeId}`, {
+                const response = await fetchWithRetry(`${API_BASE}/employees/${employeeId}`, {
                     method: 'DELETE'
                 });
-                loadEmployees(); // Reload employees after removal
-                closeRemoveEmployeeModal();
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || errorData.error || 'Failed to remove employee.');
+                }
+                
                 showCustomAlert('Employee removed successfully! Their Tier 2 access has been revoked.');
+                closeRemoveEmployeeModal();
+                await loadEmployees(); // Reload employees after removal
             } catch (error) {
                 console.error('Error removing employee:', error);
-                showCustomAlert('Failed to remove employee. Please try again.');
+                showCustomAlert('Failed to remove employee. Please try again.', true);
             }
         }
 
@@ -1065,6 +751,9 @@
                 });
             }
         });
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', loadEmployees);
     </script>
 </body>
 </html>
